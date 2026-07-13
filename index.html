@@ -54,13 +54,22 @@
       font-size: 28px;
       font-weight: 800;
       line-height: 1;
+      box-shadow: 0 5px 0 #9f8000, 0 10px 22px rgba(244, 196, 0, 0.22);
+      transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
     }
 
     .menu-botao:hover,
     .menu-botao:focus-visible {
       background: #ffd633;
+      transform: translateY(-4px) rotate(8deg) scale(1.06);
+      box-shadow: 0 9px 0 #9f8000, 0 17px 32px rgba(244, 196, 0, 0.35);
       outline: 2px solid #ffffff;
       outline-offset: 2px;
+    }
+
+    .menu-botao:active {
+      transform: translateY(3px) scale(0.98);
+      box-shadow: 0 2px 0 #9f8000, 0 6px 14px rgba(244, 196, 0, 0.22);
     }
 
     .menu-lista {
@@ -210,6 +219,19 @@
       border: 1px solid var(--borda);
       border-radius: 14px;
       background: var(--painel);
+      transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
+      transform: translateZ(0);
+    }
+
+    .card:hover,
+    .box:hover {
+      z-index: 2;
+      border-color: rgba(244, 196, 0, 0.75);
+      transform: translateY(-6px) scale(1.008);
+      box-shadow:
+        0 8px 0 rgba(244, 196, 0, 0.18),
+        0 20px 40px rgba(0, 0, 0, 0.48),
+        0 0 24px rgba(244, 196, 0, 0.10);
     }
 
     .card {
@@ -285,6 +307,19 @@
       padding: 10px;
       border: 1px solid var(--borda);
       text-align: center;
+      transition: background 160ms ease, color 160ms ease, transform 160ms ease;
+    }
+
+    tbody tr {
+      transition: filter 160ms ease;
+    }
+
+    tbody tr:hover td {
+      position: relative;
+      background: #29250f;
+      color: #ffffff;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.28);
     }
 
     td:first-child {
@@ -420,6 +455,23 @@ body,
 @media print {
   .menu-acoes {
     display: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu-botao,
+  .card,
+  .box,
+  td,
+  tbody tr {
+    transition: none !important;
+  }
+
+  .menu-botao:hover,
+  .card:hover,
+  .box:hover,
+  tbody tr:hover td {
+    transform: none !important;
   }
 }
   </style>
@@ -686,7 +738,7 @@ body,
           {
             modelo: "UNIVERSAL",
             anterior: 6,
-            atual: 5
+            atual: 2
           },
           {
             modelo: "83A",
@@ -721,7 +773,7 @@ body,
           {
             modelo: "D203U",
             anterior: 0,
-            atual: 1
+            atual: 0
           },
           {
             modelo: "DRCF219A",
@@ -734,7 +786,7 @@ body,
       estoqueMetalBronze: [
         { modelo: "CE278A", quantidade: 47 },
         { modelo: "CF283A", quantidade: 4 },
-        { modelo: "UNIVERSAL", quantidade: 56 },
+        { modelo: "UNIVERSAL", quantidade: 60 },
         { modelo: "Q2612A", quantidade: 21 },
         { modelo: "DR CF219A", quantidade: 2 },
         { modelo: "DR TN2340", quantidade: 4 },
