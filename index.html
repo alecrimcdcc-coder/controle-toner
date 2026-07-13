@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Controle Semanal de Toner</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    :root {
+      --fundo: #050505;
+      --painel: #101010;
+      --painel-2: #181818;
+      --amarelo: #f4c400;
+      --texto: #ffffff;
+      --suave: #bdbdbd;
+      --borda: #333333;
+      --vermelho: #ff4d4d;
+      --verde: #42d17d;
+    }
+
+    body {
+      margin: 0;
+      padding: 20px;
+      background: var(--fundo);
+      color: var(--texto);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .container {
+      width: min(1400px, 100%);
+      margin: 0 auto;
+    }
+
+    .topo {
+      display: grid;
+      grid-template-columns: 220px 1fr 260px;
+      gap: 24px;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--borda);
+    }
+
+    .marca {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100px;
+    }
+
+    .logo {
+      display: block;
+      width: 180px;
+      max-width: 100%;
+      height: auto;
+      object-fit: contain;
+    }
+
+    .marca-texto {
+      display: none;
+      padding: 18px;
+      border-radius: 12px;
+      background: var(--amarelo);
+      color: #000000;
+      font-size: 22px;
+      text-align: center;
+    }
+
+    .titulo {
+      text-align: center;
+    }
+
+    .titulo p {
+      margin: 0;
+    }
+
+    .titulo .linha-1 {
+      font-size: 26px;
+      font-weight: 700;
+    }
+
+    .titulo h1 {
+      margin: 2px 0 8px;
+      color: var(--amarelo);
+      font-size: clamp(40px, 6vw, 60px);
+      line-height: 1;
+    }
+
+    .titulo .periodo {
+      color: var(--suave);
+      font-size: 17px;
+    }
+
+    .responsavel {
+      min-height: 104px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 8px;
+      border: 1px solid var(--borda);
+      border-radius: 14px;
+      background: var(--painel);
+    }
+
+    .responsavel span {
+      color: var(--suave);
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .responsavel strong {
+      color: var(--amarelo);
+      font-size: 19px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .card,
+    .box {
+      border: 1px solid var(--borda);
+      border-radius: 14px;
+      background: var(--painel);
+    }
+
+    .card {
+      padding: 18px;
+    }
+
+    .card h2 {
+      margin: 0 0 12px;
+      color: var(--suave);
+      font-size: 14px;
+      text-transform: uppercase;
+    }
+
+    .numero {
+      color: var(--amarelo);
+      font-size: 38px;
+      font-weight: 800;
+    }
+
+    .numero.positivo {
+      color: var(--verde);
+    }
+
+    .numero.negativo,
+    .negativo {
+      color: var(--vermelho);
+    }
+
+    .card small {
+      display: block;
+      margin-top: 4px;
+      color: var(--suave);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(300px, 1fr);
+      gap: 20px;
+    }
+
+    .box {
+      padding: 18px;
+      margin-bottom: 20px;
+    }
+
+    .box h2 {
+      margin: 0 0 16px;
+      padding-left: 10px;
+      border-left: 5px solid var(--amarelo);
+      font-size: 22px;
+    }
+
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--painel-2);
+    }
+
+    th {
+      padding: 12px;
+      background: var(--amarelo);
+      color: #000000;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    td {
+      padding: 10px;
+      border: 1px solid var(--borda);
+      text-align: center;
+    }
+
+    td:first-child {
+      font-weight: 700;
+      text-align: left;
+    }
+
+    tfoot td {
+      background: var(--amarelo);
+      color: #000000;
+      font-weight: 800;
+    }
+
+    .centro {
+      text-align: center;
+    }
+
+    .centro h2 {
+      text-align: left;
+    }
+
+    .centro p {
+      margin: 6px 0 0;
+      color: var(--suave);
+    }
+
+    .barra {
+      margin-bottom: 16px;
+    }
+
+    .barra:last-child {
+      margin-bottom: 0;
+    }
+
+    .barra-cabecalho {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+
+    .barra-interna {
+      height: 24px;
+      overflow: hidden;
+      border-radius: 20px;
+      background: #2b2b2b;
+    }
+
+    .barra-valor {
+      min-width: 48px;
+      height: 100%;
+      padding: 0 10px;
+      background: var(--amarelo);
+      color: #000000;
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 24px;
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .lista {
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+
+    .lista li {
+      padding: 11px 0;
+      border-bottom: 1px solid #262626;
+      line-height: 1.45;
+    }
+
+    .lista li:last-child {
+      border-bottom: 0;
+    }
+
+    .rodape {
+      padding-top: 18px;
+      margin-top: 4px;
+      border-top: 1px solid var(--borda);
+      color: var(--suave);
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 950px) {
+      .topo {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .marca {
+        justify-content: center;
+      }
+
+      .responsavel {
+        align-items: center;
+      }
+
+      .cards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 560px) {
+      body {
+        padding: 12px;
+      }
+
+      .cards {
+        grid-template-columns: 1fr;
+      }
+
+      th,
+      td {
+        padding: 9px;
+        font-size: 12px;
+      }
+    }
+html,
+body,
+* {
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+}
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <header class="topo">
+
+      <div class="marca">
+        <img
+          class="logo"
+          src="logomatriz.png"
+          alt="Logo da Casa das Correias"
+          onerror="
+            this.style.display='none';
+            document.getElementById('marcaTexto').style.display='block';
+          "
+        >
+
+        <strong class="marca-texto" id="marcaTexto">
+          Casa das Correias
+        </strong>
+      </div>
+
+      <div class="titulo">
+        <p class="linha-1">CONTROLE SEMANAL</p>
+        <h1>DE TONER</h1>
+        <p class="periodo" id="periodo"></p>
+      </div>
+
+      <div class="responsavel">
+        <span>Responsável</span>
+        <strong id="responsavel"></strong>
+      </div>
+
+    </header>
+
+    <section class="cards">
+
+      <article class="card">
+        <h2 id="tituloAnterior"></h2>
+        <div class="numero" id="totalAnterior"></div>
+      </article>
+
+      <article class="card">
+        <h2 id="tituloAtual"></h2>
+        <div class="numero" id="totalAtual"></div>
+      </article>
+
+      <article class="card">
+        <h2>Consumo no período</h2>
+        <div class="numero" id="consumoTotal"></div>
+      </article>
+
+      <article class="card">
+        <h2>Variação do estoque</h2>
+        <div class="numero" id="variacaoTotal"></div>
+        <small id="variacaoPercentual"></small>
+      </article>
+
+    </section>
+
+    <main class="grid">
+
+      <section>
+
+        <div class="box">
+          <h2>Conferência de Estoque - Sala</h2>
+
+          <div class="table-wrap">
+            <table>
+
+              <thead>
+                <tr id="cabecalhoEstoque"></tr>
+              </thead>
+
+              <tbody id="corpoEstoque"></tbody>
+
+              <tfoot>
+                <tr id="totalEstoque"></tr>
+              </tfoot>
+
+            </table>
+          </div>
+        </div>
+
+        <div class="box">
+          <h2>Estoque - Metal Bronze</h2>
+
+          <div class="table-wrap">
+            <table>
+
+              <thead>
+                <tr>
+                  <th>Modelo</th>
+                  <th>Quantidade</th>
+                </tr>
+              </thead>
+
+              <tbody id="corpoEstoqueMetalBronze"></tbody>
+
+              <tfoot>
+                <tr>
+                  <td>Total</td>
+                  <td id="totalEstoqueMetalBronze"></td>
+                </tr>
+              </tfoot>
+
+            </table>
+          </div>
+        </div>
+
+        <div class="box">
+          <h2>Consumo de Toner</h2>
+
+          <div class="table-wrap">
+            <table>
+
+              <thead>
+                <tr>
+                  <th>Área</th>
+                  <th>Local</th>
+                  <th>Toner</th>
+                  <th>Quantidade</th>
+                </tr>
+              </thead>
+
+              <tbody id="corpoConsumo"></tbody>
+
+              <tfoot>
+                <tr>
+                  <td colspan="3">Total consumido</td>
+                  <td id="totalConsumoTabela"></td>
+                </tr>
+              </tfoot>
+
+            </table>
+          </div>
+        </div>
+
+      </section>
+
+      <aside>
+
+        <div class="box centro">
+          <h2>Média do Estoque</h2>
+
+          <div class="numero" id="mediaEstoque"></div>
+
+          <p>Média das duas conferências</p>
+        </div>
+
+        <div class="box">
+          <h2>Consumo por Modelo</h2>
+          <div id="consumoModelo"></div>
+        </div>
+
+        <div class="box">
+          <h2>Destaques do Período</h2>
+          <ul class="lista" id="destaques"></ul>
+        </div>
+
+      </aside>
+
+    </main>
+
+    <footer class="rodape" id="rodape"></footer>
+
+  </div>
+
+  <script>
+    const dados = {
+      relatorio: {
+        periodo: {
+          inicio: "06/07/2026",
+          fim: "11/07/2026"
+        },
+
+        responsavel: "Eduardo Alecrim",
+
+        geradoEm: "11/07/2026 às 12:00"
+      },
+
+      estoque: {
+        dataAnterior: "04/07/2026",
+        dataAtual: "11/07/2026",
+
+        itens: [
+          {
+            modelo: "12A",
+            anterior: 2,
+            atual: 7
+          },
+          {
+            modelo: "78A",
+            anterior: 4,
+            atual: 7
+          },
+          {
+            modelo: "UNIVERSAL",
+            anterior: 6,
+            atual: 2
+          },
+          {
+            modelo: "83A",
+            anterior: 4,
+            atual: 4
+          },
+          {
+            modelo: "TN 2340",
+            anterior: 1,
+            atual: 2
+          },
+          {
+            modelo: "SP3710",
+            anterior: 0,
+            atual: 2
+          },
+          {
+            modelo: "DR2340",
+            anterior: 1,
+            atual: 1
+          },
+          {
+            modelo: "P550X",
+            anterior: 0,
+            atual: 1
+          },
+          {
+            modelo: "CF217A",
+            anterior: 0,
+            atual: 0
+          },
+          {
+            modelo: "D203U",
+            anterior: 0,
+            atual: 1
+          },
+          {
+            modelo: "DRCF219A",
+            anterior: 0,
+            atual: 1
+          }
+        ]
+      },
+
+      estoqueMetalBronze: [
+        { modelo: "CE278A", quantidade: 47 },
+        { modelo: "CF283A", quantidade: 4 },
+        { modelo: "UNIVERSAL", quantidade: 60 },
+        { modelo: "Q2612A", quantidade: 21 },
+        { modelo: "DR CF219A", quantidade: 2 },
+        { modelo: "DR TN2340", quantidade: 4 },
+        { modelo: "SP 3710", quantidade: 6 },
+        { modelo: "TN 2340", quantidade: 1 },
+        { modelo: "D203U", quantidade: 2 },
+        { modelo: "P-550-X", quantidade: 2 },
+        { modelo: "HP 505X/280X", quantidade: 1 }
+      ],
+
+      consumo: [
+        {
+          area: "COMERCIAL",
+          local: "CAIXA 02 - MATRIZ",
+          toner: "UNIVERSAL",
+          quantidade: 1
+        },
+        {
+          area: "LOGÍSTICA",
+          local: "EXPEDIÇÃO",
+          toner: "12A",
+          quantidade: 1
+        },
+        {
+          area: "LOGÍSTICA",
+          local: "EXPEDIÇÃO - FILIAIS",
+          toner: "12A",
+          quantidade: 1
+        },
+        {
+          area: "LOGÍSTICA",
+          local: "TROCA E DEVOLUÇÃO",
+          toner: "UNIVERSAL",
+          quantidade: 1
+        },
+        {
+          area: "CENTRO",
+          local: "CAIXAS - CENTRO",
+          toner: "78A",
+          quantidade: 1
+        },
+        {
+          area: "CENTRO",
+          local: "BALCÃO DE GERÊNCIA - CENTRO",
+          toner: "78A",
+          quantidade: 1
+        }
+      ],
+
+      destaques: [
+        "O estoque aumentou 9 unidades entre 04/07/2026 e 11/07/2026, representando crescimento de 50,0%.",
+
+        "Os modelos 12A e 78A encerraram o período com 7 unidades cada.",
+
+        "Foram consumidos 6 toners: 2 Universal, 2 do modelo 12A e 2 do modelo 78A.",
+
+        "A área de Logística apresentou o maior consumo, com 3 unidades.",
+
+        "Os modelos CF217A e D203U permanecem sem unidades disponíveis em estoque."
+      ]
+    };
+
+    function somar(lista, campo) {
+      return lista.reduce((total, item) => {
+        return total + Number(item[campo] || 0);
+      }, 0);
+    }
+
+    function formatarComSinal(valor, casasDecimais = 0) {
+      const numero = Number(valor || 0);
+
+      const texto = numero
+        .toFixed(casasDecimais)
+        .replace(".", ",");
+
+      if (numero > 0) {
+        return `+${texto}`;
+      }
+
+      return texto;
+    }
+
+    const totalAnterior = somar(
+      dados.estoque.itens,
+      "anterior"
+    );
+
+    const totalAtual = somar(
+      dados.estoque.itens,
+      "atual"
+    );
+
+    const variacao = totalAtual - totalAnterior;
+
+    const percentualVariacao =
+      totalAnterior === 0
+        ? 0
+        : (variacao / totalAnterior) * 100;
+
+    const totalConsumido = somar(
+      dados.consumo,
+      "quantidade"
+    );
+
+    const mediaEstoque =
+      (totalAnterior + totalAtual) / 2;
+
+    document.getElementById("periodo").textContent =
+      `Período: ${dados.relatorio.periodo.inicio} a ${dados.relatorio.periodo.fim}`;
+
+    document.getElementById("responsavel").textContent =
+      dados.relatorio.responsavel;
+
+    document.getElementById("tituloAnterior").textContent =
+      `Estoque em ${dados.estoque.dataAnterior}`;
+
+    document.getElementById("tituloAtual").textContent =
+      `Estoque em ${dados.estoque.dataAtual}`;
+
+    document.getElementById("totalAnterior").textContent =
+      totalAnterior;
+
+    document.getElementById("totalAtual").textContent =
+      totalAtual;
+
+    document.getElementById("consumoTotal").textContent =
+      totalConsumido;
+
+    const elementoVariacao =
+      document.getElementById("variacaoTotal");
+
+    elementoVariacao.textContent =
+      formatarComSinal(variacao);
+
+    if (variacao > 0) {
+      elementoVariacao.classList.add("positivo");
+    }
+
+    if (variacao < 0) {
+      elementoVariacao.classList.add("negativo");
+    }
+
+    document.getElementById("variacaoPercentual").textContent =
+      `${formatarComSinal(percentualVariacao, 1)}% em relação à conferência anterior`;
+
+    document.getElementById("mediaEstoque").textContent =
+      mediaEstoque
+        .toFixed(1)
+        .replace(".", ",");
+
+    document.getElementById("cabecalhoEstoque").innerHTML = `
+      <th>Modelo</th>
+      <th>${dados.estoque.dataAnterior}</th>
+      <th>${dados.estoque.dataAtual}</th>
+      <th>Variação</th>
+    `;
+
+    document.getElementById("corpoEstoque").innerHTML =
+      dados.estoque.itens
+        .map((item) => {
+          const variacaoItem =
+            item.atual - item.anterior;
+
+          const classe =
+            variacaoItem < 0
+              ? "negativo"
+              : "";
+
+          return `
+            <tr>
+              <td>${item.modelo}</td>
+              <td>${item.anterior}</td>
+              <td>${item.atual}</td>
+
+              <td class="${classe}">
+                ${formatarComSinal(variacaoItem)}
+              </td>
+            </tr>
+          `;
+        })
+        .join("");
+
+    document.getElementById("totalEstoque").innerHTML = `
+      <td>Total</td>
+      <td>${totalAnterior}</td>
+      <td>${totalAtual}</td>
+      <td>${formatarComSinal(variacao)}</td>
+    `;
+
+    const totalEstoqueMetalBronze = somar(
+      dados.estoqueMetalBronze,
+      "quantidade"
+    );
+
+    document.getElementById("corpoEstoqueMetalBronze").innerHTML =
+      dados.estoqueMetalBronze
+        .map((item) => {
+          return `
+            <tr>
+              <td>${item.modelo}</td>
+              <td>${item.quantidade}</td>
+            </tr>
+          `;
+        })
+        .join("");
+
+    document.getElementById("totalEstoqueMetalBronze").textContent =
+      totalEstoqueMetalBronze;
+
+    document.getElementById("corpoConsumo").innerHTML =
+      dados.consumo
+        .map((item) => {
+          return `
+            <tr>
+              <td>${item.area}</td>
+              <td>${item.local}</td>
+              <td>${item.toner}</td>
+              <td>${item.quantidade}</td>
+            </tr>
+          `;
+        })
+        .join("");
+
+    document.getElementById("totalConsumoTabela").textContent =
+      totalConsumido;
+
+    const consumoPorModelo =
+      dados.consumo.reduce((resultado, item) => {
+        resultado[item.toner] =
+          (resultado[item.toner] || 0) +
+          Number(item.quantidade || 0);
+
+        return resultado;
+      }, {});
+
+    document.getElementById("consumoModelo").innerHTML =
+      Object.entries(consumoPorModelo)
+        .map(([modelo, quantidade]) => {
+          const percentualModelo =
+            totalConsumido === 0
+              ? 0
+              : (quantidade / totalConsumido) * 100;
+
+          return `
+            <div class="barra">
+
+              <div class="barra-cabecalho">
+                <strong>${modelo}</strong>
+                <span>${quantidade} unidade(s)</span>
+              </div>
+
+              <div class="barra-interna">
+
+                <div
+                  class="barra-valor"
+                  style="width: ${percentualModelo}%"
+                >
+                  ${percentualModelo
+                    .toFixed(1)
+                    .replace(".", ",")}%
+                </div>
+
+              </div>
+
+            </div>
+          `;
+        })
+        .join("");
+
+    document.getElementById("destaques").innerHTML =
+      dados.destaques
+        .map((texto) => {
+          return `<li>${texto}</li>`;
+        })
+        .join("");
+
+    document.getElementById("rodape").textContent =
+      `Controle realizado com responsabilidade e atenção aos detalhes. Relatório gerado em: ${dados.relatorio.geradoEm}`;
+  </script>
+
+</body>
+</html>
