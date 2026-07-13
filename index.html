@@ -36,6 +36,84 @@
       margin: 0 auto;
     }
 
+    .menu-acoes {
+      position: fixed;
+      top: 18px;
+      right: 18px;
+      z-index: 1000;
+    }
+
+    .menu-botao {
+      width: 48px;
+      height: 48px;
+      border: 1px solid var(--borda);
+      border-radius: 50%;
+      background: var(--amarelo);
+      color: #000000;
+      cursor: pointer;
+      font-size: 28px;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .menu-botao:hover,
+    .menu-botao:focus-visible {
+      background: #ffd633;
+      outline: 2px solid #ffffff;
+      outline-offset: 2px;
+    }
+
+    .menu-lista {
+      position: absolute;
+      top: 56px;
+      right: 0;
+      width: 230px;
+      display: none;
+      overflow: hidden;
+      border: 1px solid var(--borda);
+      border-radius: 12px;
+      background: var(--painel);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+    }
+
+    .menu-lista.aberto {
+      display: block;
+    }
+
+    .menu-lista a,
+    .menu-lista button {
+      width: 100%;
+      display: block;
+      padding: 13px 16px;
+      border: 0;
+      border-bottom: 1px solid #292929;
+      background: transparent;
+      color: var(--texto);
+      cursor: pointer;
+      font: inherit;
+      text-align: left;
+      text-decoration: none;
+    }
+
+    .menu-lista a:hover,
+    .menu-lista button:hover,
+    .menu-lista a:focus-visible,
+    .menu-lista button:focus-visible {
+      background: var(--painel-2);
+      color: var(--amarelo);
+      outline: none;
+    }
+
+    .menu-lista a:last-child,
+    .menu-lista button:last-child {
+      border-bottom: 0;
+    }
+
+    .menu-separador {
+      height: 4px;
+      background: var(--amarelo);
+    }
+
     .topo {
       display: grid;
       grid-template-columns: 220px 1fr 260px;
@@ -338,12 +416,39 @@ body,
   -webkit-print-color-adjust: exact !important;
   print-color-adjust: exact !important;
 }
+
+@media print {
+  .menu-acoes {
+    display: none !important;
+  }
+}
   </style>
 </head>
 
 <body>
 
-  <div class="container">
+  <nav class="menu-acoes" aria-label="Menu de ações">
+    <button
+      class="menu-botao"
+      id="menuBotao"
+      type="button"
+      aria-label="Abrir menu"
+      aria-expanded="false"
+      aria-controls="menuLista"
+    >⋮</button>
+
+    <div class="menu-lista" id="menuLista">
+      <a href="#estoqueSala">Estoque da Sala</a>
+      <a href="#estoqueMetalBronze">Metal Bronze</a>
+      <a href="#consumoToner">Consumo de Toner</a>
+      <div class="menu-separador" aria-hidden="true"></div>
+      <button type="button" id="imprimirRelatorio">Imprimir relatório</button>
+      <button type="button" id="salvarPdf">Salvar em PDF</button>
+      <a href="#topoPagina">Voltar ao topo</a>
+    </div>
+  </nav>
+
+  <div class="container" id="topoPagina">
 
     <header class="topo">
 
@@ -405,7 +510,7 @@ body,
 
       <section>
 
-        <div class="box">
+        <div class="box" id="estoqueSala">
           <h2>Conferência de Estoque - Sala</h2>
 
           <div class="table-wrap">
@@ -425,7 +530,7 @@ body,
           </div>
         </div>
 
-        <div class="box">
+        <div class="box" id="estoqueMetalBronze">
           <h2>Estoque - Metal Bronze</h2>
 
           <div class="table-wrap">
@@ -451,7 +556,7 @@ body,
           </div>
         </div>
 
-        <div class="box">
+        <div class="box" id="consumoToner">
           <h2>Consumo de Toner</h2>
 
           <div class="table-wrap">
@@ -510,6 +615,47 @@ body,
   </div>
 
   <script>
+    const menuBotao = document.getElementById("menuBotao");
+    const menuLista = document.getElementById("menuLista");
+
+    function fecharMenu() {
+      menuLista.classList.remove("aberto");
+      menuBotao.setAttribute("aria-expanded", "false");
+    }
+
+    menuBotao.addEventListener("click", (evento) => {
+      evento.stopPropagation();
+      const estaAberto = menuLista.classList.toggle("aberto");
+      menuBotao.setAttribute("aria-expanded", String(estaAberto));
+    });
+
+    menuLista.addEventListener("click", (evento) => {
+      evento.stopPropagation();
+
+      if (evento.target.matches("a")) {
+        fecharMenu();
+      }
+    });
+
+    document.addEventListener("click", fecharMenu);
+
+    document.addEventListener("keydown", (evento) => {
+      if (evento.key === "Escape") {
+        fecharMenu();
+        menuBotao.focus();
+      }
+    });
+
+    document.getElementById("imprimirRelatorio").addEventListener("click", () => {
+      fecharMenu();
+      window.print();
+    });
+
+    document.getElementById("salvarPdf").addEventListener("click", () => {
+      fecharMenu();
+      window.print();
+    });
+
     const dados = {
       relatorio: {
         periodo: {
@@ -539,8 +685,9 @@ body,
           },
           {
             modelo: "UNIVERSAL",
-            anterior: 2,
-            atual: 5          },
+            anterior: 6,
+            atual: 2
+          },
           {
             modelo: "83A",
             anterior: 4,
@@ -574,7 +721,7 @@ body,
           {
             modelo: "D203U",
             anterior: 0,
-            atual: 1
+            atual: 0
           },
           {
             modelo: "DRCF219A",
@@ -587,7 +734,7 @@ body,
       estoqueMetalBronze: [
         { modelo: "CE278A", quantidade: 47 },
         { modelo: "CF283A", quantidade: 4 },
-        { modelo: "UNIVERSAL", quantidade: 56 },
+        { modelo: "UNIVERSAL", quantidade: 60 },
         { modelo: "Q2612A", quantidade: 21 },
         { modelo: "DR CF219A", quantidade: 2 },
         { modelo: "DR TN2340", quantidade: 4 },
