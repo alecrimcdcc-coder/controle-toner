@@ -123,6 +123,94 @@
       background: var(--amarelo);
     }
 
+    .relatorio-atividades {
+      scroll-margin-top: 24px;
+    }
+
+    .relatorio-cabecalho {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .relatorio-cabecalho h2 {
+      margin-bottom: 0;
+    }
+
+    .botao-relatorio {
+      padding: 11px 16px;
+      border: 0;
+      border-radius: 10px;
+      background: var(--amarelo);
+      color: #000000;
+      cursor: pointer;
+      font-weight: 800;
+      box-shadow: 0 4px 0 #9f8000;
+      transition: transform 180ms ease, box-shadow 180ms ease;
+    }
+
+    .botao-relatorio:hover,
+    .botao-relatorio:focus-visible {
+      transform: translateY(-3px);
+      box-shadow: 0 7px 0 #9f8000, 0 12px 24px rgba(244, 196, 0, 0.22);
+      outline: 2px solid #ffffff;
+      outline-offset: 2px;
+    }
+
+    .imagem-relatorio {
+      width: min(760px, 100%);
+      display: block;
+      margin: 0 auto;
+      border: 1px solid var(--borda);
+      border-radius: 12px;
+      cursor: zoom-in;
+      box-shadow: 0 18px 38px rgba(0, 0, 0, 0.42);
+      transition: transform 220ms ease, box-shadow 220ms ease;
+    }
+
+    .imagem-relatorio:hover {
+      transform: translateY(-5px) scale(1.006);
+      box-shadow: 0 10px 0 rgba(244, 196, 0, 0.18), 0 26px 48px rgba(0, 0, 0, 0.52);
+    }
+
+    .visualizador-relatorio {
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      display: none;
+      padding: 24px;
+      overflow: auto;
+      background: rgba(0, 0, 0, 0.94);
+    }
+
+    .visualizador-relatorio.aberto {
+      display: block;
+    }
+
+    .visualizador-relatorio img {
+      width: min(900px, 100%);
+      display: block;
+      margin: 46px auto 24px;
+      border-radius: 12px;
+    }
+
+    .fechar-visualizador {
+      position: fixed;
+      top: 16px;
+      right: 22px;
+      width: 44px;
+      height: 44px;
+      border: 1px solid var(--borda);
+      border-radius: 50%;
+      background: var(--amarelo);
+      color: #000000;
+      cursor: pointer;
+      font-size: 28px;
+      font-weight: 800;
+    }
+
     .topo {
       display: grid;
       grid-template-columns: 220px 1fr 260px;
@@ -428,6 +516,11 @@
       .grid {
         grid-template-columns: 1fr;
       }
+
+      .relatorio-cabecalho {
+        align-items: stretch;
+        flex-direction: column;
+      }
     }
 
     @media (max-width: 560px) {
@@ -454,6 +547,11 @@ body,
 
 @media print {
   .menu-acoes {
+    display: none !important;
+  }
+
+  .botao-relatorio,
+  .visualizador-relatorio {
     display: none !important;
   }
 }
@@ -493,6 +591,7 @@ body,
       <a href="#estoqueSala">Estoque da Sala</a>
       <a href="#estoqueMetalBronze">Metal Bronze</a>
       <a href="#consumoToner">Consumo de Toner</a>
+      <a href="#atividadesRealizadas">Atividades realizadas</a>
       <div class="menu-separador" aria-hidden="true"></div>
       <button type="button" id="imprimirRelatorio">Imprimir relatório</button>
       <button type="button" id="salvarPdf">Salvar em PDF</button>
@@ -662,8 +761,39 @@ body,
 
     </main>
 
+    <section class="box relatorio-atividades" id="atividadesRealizadas">
+      <div class="relatorio-cabecalho">
+        <h2>Atividades Realizadas</h2>
+        <button class="botao-relatorio" id="abrirRelatorio" type="button">
+          Ampliar relatório
+        </button>
+      </div>
+
+      <img
+        class="imagem-relatorio"
+        id="imagemRelatorio"
+        src="69548325-273d-478a-821e-6caae9be6802.png"
+        alt="Relatório de visita técnica à filial Cidade Nova, com atividades realizadas, observações e recomendações"
+        loading="lazy"
+      >
+    </section>
+
     <footer class="rodape" id="rodape"></footer>
 
+  </div>
+
+  <div
+    class="visualizador-relatorio"
+    id="visualizadorRelatorio"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Relatório de atividades realizadas ampliado"
+  >
+    <button class="fechar-visualizador" id="fecharVisualizador" type="button" aria-label="Fechar relatório">×</button>
+    <img
+      src="69548325-273d-478a-821e-6caae9be6802.png"
+      alt="Relatório de visita técnica à filial Cidade Nova ampliado"
+    >
   </div>
 
   <script>
@@ -708,6 +838,39 @@ body,
       window.print();
     });
 
+    const visualizadorRelatorio = document.getElementById("visualizadorRelatorio");
+    const abrirRelatorio = document.getElementById("abrirRelatorio");
+    const imagemRelatorio = document.getElementById("imagemRelatorio");
+    const fecharVisualizador = document.getElementById("fecharVisualizador");
+
+    function mostrarRelatorio() {
+      visualizadorRelatorio.classList.add("aberto");
+      document.body.style.overflow = "hidden";
+      fecharVisualizador.focus();
+    }
+
+    function ocultarRelatorio() {
+      visualizadorRelatorio.classList.remove("aberto");
+      document.body.style.overflow = "";
+      abrirRelatorio.focus();
+    }
+
+    abrirRelatorio.addEventListener("click", mostrarRelatorio);
+    imagemRelatorio.addEventListener("click", mostrarRelatorio);
+    fecharVisualizador.addEventListener("click", ocultarRelatorio);
+
+    visualizadorRelatorio.addEventListener("click", (evento) => {
+      if (evento.target === visualizadorRelatorio) {
+        ocultarRelatorio();
+      }
+    });
+
+    document.addEventListener("keydown", (evento) => {
+      if (evento.key === "Escape" && visualizadorRelatorio.classList.contains("aberto")) {
+        ocultarRelatorio();
+      }
+    });
+
     const dados = {
       relatorio: {
         periodo: {
@@ -722,7 +885,7 @@ body,
 
       estoque: {
         dataAnterior: "04/07/2026",
-        dataAtual: "14/07/2026",
+        dataAtual: "11/07/2026",
 
         itens: [
           {
@@ -738,7 +901,7 @@ body,
           {
             modelo: "UNIVERSAL",
             anterior: 6,
-            atual: 4
+            atual: 2
           },
           {
             modelo: "83A",
@@ -786,7 +949,7 @@ body,
       estoqueMetalBronze: [
         { modelo: "CE278A", quantidade: 47 },
         { modelo: "CF283A", quantidade: 4 },
-        { modelo: "UNIVERSAL", quantidade: 56 },
+        { modelo: "UNIVERSAL", quantidade: 60 },
         { modelo: "Q2612A", quantidade: 21 },
         { modelo: "DR CF219A", quantidade: 2 },
         { modelo: "DR TN2340", quantidade: 4 },
@@ -837,7 +1000,7 @@ body,
       ],
 
       destaques: [
-        "O estoque aumentou 9 unidades entre 04/07/2026 e 14/07/2026, representando crescimento de 50,0%.",
+        "O estoque aumentou 9 unidades entre 04/07/2026 e 11/07/2026, representando crescimento de 50,0%.",
 
         "Os modelos 12A e 78A encerraram o período com 7 unidades cada.",
 
