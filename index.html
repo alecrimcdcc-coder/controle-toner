@@ -889,49 +889,49 @@ body,
     const dados = {
       relatorio: {
         periodo: {
-          inicio: "06/07/2026",
-          fim: "11/07/2026"
+          inicio: "14/07/2026",
+          fim: "25/07/2026"
         },
 
         responsavel: "Eduardo Alecrim",
 
-        geradoEm: "11/07/2026 às 12:00"
+        geradoEm: "25/07/2026 às 10:11"
       },
 
       estoque: {
-        dataAnterior: "04/07/2026",
-        dataAtual: "14/07/2026",
+        dataAnterior: "14/07/2026",
+        dataAtual: "25/07/2026",
 
         itens: [
           {
-            modelo: "12A",
-            anterior: 2,
-            atual: 7
+            modelo: "12A (Q2612A)",
+            anterior: 7,
+            atual: 6
           },
           {
-            modelo: "78A",
-            anterior: 4,
+            modelo: "78A (CE278A)",
+            anterior: 7,
             atual: 7
           },
           {
             modelo: "UNIVERSAL",
-            anterior: 6,
-            atual: 4
+            anterior: 4,
+            atual: 2
           },
           {
-            modelo: "83A",
+            modelo: "83A (CF283A)",
             anterior: 4,
-            atual: 4
+            atual: 3
           },
           {
             modelo: "TN 2340",
-            anterior: 1,
+            anterior: 2,
             atual: 2
           },
           {
             modelo: "SP3710",
-            anterior: 0,
-            atual: 2
+            anterior: 2,
+            atual: 1
           },
           {
             modelo: "DR2340",
@@ -940,13 +940,13 @@ body,
           },
           {
             modelo: "P550X",
-            anterior: 0,
-            atual: 1
+            anterior: 1,
+            atual: 0
           },
           {
-            modelo: "CF217A",
+            modelo: "CF217A (P-1085)",
             anterior: 0,
-            atual: 0
+            atual: 2
           },
           {
             modelo: "D203U",
@@ -955,8 +955,13 @@ body,
           },
           {
             modelo: "DRCF219A",
+            anterior: 1,
+            atual: 2
+          },
+          {
+            modelo: "BQ-CF512A",
             anterior: 0,
-            atual: 1
+            atual: 2
           }
         ]
       },
@@ -965,7 +970,7 @@ body,
         { modelo: "CE278A", quantidade: 47 },
         { modelo: "CF283A", quantidade: 4 },
         { modelo: "UNIVERSAL", quantidade: 56 },
-        { modelo: "Q2612A", quantidade: 21 },
+        { modelo: "Q2612A", quantidade: 20 },
         { modelo: "DR CF219A", quantidade: 2 },
         { modelo: "DR TN2340", quantidade: 4 },
         { modelo: "SP 3710", quantidade: 6 },
@@ -977,16 +982,40 @@ body,
 
       consumo: [
         {
+          area: "ADMINISTRATIVO",
+          local: "TESOURARIA",
+          toner: "UNIVERSAL",
+          quantidade: 1
+        },
+        {
+          area: "ADMINISTRATIVO",
+          local: "COMPRAS",
+          toner: "78A",
+          quantidade: 1
+        },
+        {
           area: "COMERCIAL",
           local: "CAIXA 02 - MATRIZ",
           toner: "UNIVERSAL",
           quantidade: 1
         },
         {
+          area: "COMERCIAL",
+          local: "CAIXAS - MATRIZ",
+          toner: "UNIVERSAL",
+          quantidade: 1
+        },
+        {
+          area: "LOGÍSTICA",
+          local: "COORDENAÇÃO LOGÍSTICA",
+          toner: "SP3710",
+          quantidade: 1
+        },
+        {
           area: "LOGÍSTICA",
           local: "EXPEDIÇÃO",
           toner: "12A",
-          quantidade: 1
+          quantidade: 3
         },
         {
           area: "LOGÍSTICA",
@@ -996,7 +1025,37 @@ body,
         },
         {
           area: "LOGÍSTICA",
+          local: "INVENTÁRIO",
+          toner: "12A",
+          quantidade: 1
+        },
+        {
+          area: "LOGÍSTICA",
+          local: "RETIFICA POSTERIOR",
+          toner: "SP3710",
+          quantidade: 1
+        },
+        {
+          area: "LOGÍSTICA",
           local: "TROCA E DEVOLUÇÃO",
+          toner: "UNIVERSAL",
+          quantidade: 2
+        },
+        {
+          area: "CIDADE NOVA",
+          local: "CAIXAS - CDN",
+          toner: "12A",
+          quantidade: 1
+        },
+        {
+          area: "CIDADE NOVA",
+          local: "CAIXA 02 - CDN",
+          toner: "UNIVERSAL",
+          quantidade: 1
+        },
+        {
+          area: "CIDADE NOVA",
+          local: "MESA VINO - CDN",
           toner: "UNIVERSAL",
           quantidade: 1
         },
@@ -1015,15 +1074,15 @@ body,
       ],
 
       destaques: [
-        "O estoque aumentou 9 unidades entre 04/07/2026 e 14/07/2026, representando crescimento de 50,0%.",
+        "O estoque da Sala variou -1 unidade entre 14/07/2026 e 25/07/2026, uma redução de 3,4%.",
 
-        "Os modelos 12A e 78A encerraram o período com 7 unidades cada.",
+        "O modelo P550X zerou (de 1 para 0 unidade), enquanto CF217A e BQ-CF512A passaram a ser contabilizados na Sala, com 2 unidades cada.",
 
-        "Foram consumidos 6 toners: 2 Universal, 2 do modelo 12A e 2 do modelo 78A.",
+        "Das 2 unidades de UNIVERSAL em estoque na Sala, ambas estão marcadas como C/DEFEITO.",
 
-        "A área de Logística apresentou o maior consumo, com 3 unidades.",
+        "No Metal Bronze, o Q2612A caiu de 21 para 20 unidades; os demais modelos permaneceram estáveis, com destaque para CE278A (47UN) e UNIVERSAL (56UN).",
 
-        "Os modelos CF217A e D203U permanecem sem unidades disponíveis em estoque."
+        "D203U segue sem unidades disponíveis na Sala."
       ]
     };
 
@@ -1244,6 +1303,9 @@ body,
     document.getElementById("rodape").textContent =
       `Controle realizado com responsabilidade e atenção aos detalhes. Relatório gerado em: ${dados.relatorio.geradoEm}`;
   </script>
+
+</body>
+</html>
 
 </body>
 </html>
