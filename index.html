@@ -123,7 +123,8 @@
       background: var(--amarelo);
     }
 
-    .relatorio-atividades { scroll-margin-top: 24px; }
+    .relatorio-atividades { scroll-margin-top: 24px; display: none; }
+    .relatorio-atividades.visivel { display: block; }
     .relatorio-cabecalho {
       display: flex; align-items: center; justify-content: space-between;
       gap: 16px; margin-bottom: 16px;
@@ -594,7 +595,7 @@ body,
       <a href="#estoqueSala">Estoque da Sala</a>
       <a href="#estoqueMetalBronze">Metal Bronze</a>
       <a href="#consumoToner">Consumo de Toner</a>
-      <a href="#atividadesRealizadas">Atividades realizadas</a>
+      <button type="button" id="menuAtividades">Atividades realizadas</button>
       <div class="menu-separador" aria-hidden="true"></div>
       <button type="button" id="imprimirRelatorio">Imprimir relatório</button>
       <button type="button" id="salvarPdf">Salvar em PDF</button>
@@ -822,6 +823,13 @@ body,
     document.getElementById("salvarPdf").addEventListener("click", () => {
       fecharMenu();
       window.print();
+    });
+
+    document.getElementById("menuAtividades").addEventListener("click", () => {
+      fecharMenu();
+      const secaoAtividades = document.getElementById("atividadesRealizadas");
+      secaoAtividades.classList.add("visivel");
+      secaoAtividades.scrollIntoView({ behavior: "smooth" });
     });
 
     const visualizadorRelatorio = document.getElementById("visualizadorRelatorio");
