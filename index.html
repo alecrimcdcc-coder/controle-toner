@@ -168,7 +168,7 @@
 
     .topo {
       display: grid;
-      grid-template-columns: 220px 1fr 260px;
+      grid-template-columns: 220px 1fr;
       gap: 24px;
       align-items: center;
       margin-bottom: 20px;
@@ -224,30 +224,6 @@
     .titulo .periodo {
       color: var(--suave);
       font-size: 17px;
-    }
-
-    .responsavel {
-      min-height: 104px;
-      padding: 18px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 8px;
-      border: 1px solid var(--borda);
-      border-radius: 14px;
-      background: var(--painel);
-    }
-
-    .responsavel span {
-      color: var(--suave);
-      font-size: 13px;
-      font-weight: 700;
-      text-transform: uppercase;
-    }
-
-    .responsavel strong {
-      color: var(--amarelo);
-      font-size: 19px;
     }
 
     .cards {
@@ -460,10 +436,6 @@
         justify-content: center;
       }
 
-      .responsavel {
-        align-items: center;
-      }
-
       .cards {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
@@ -656,11 +628,6 @@ body,
         <p class="periodo" id="periodo"></p>
       </div>
 
-      <div class="responsavel">
-        <span>Responsável</span>
-        <strong id="responsavel"></strong>
-      </div>
-
     </header>
 
     <section class="cards">
@@ -739,7 +706,7 @@ body,
         </div>
 
         <div class="box" id="consumoToner">
-          <h2>Consumo de Toner</h2>
+          <h2>Consumo de Toner - Julho</h2>
 
           <div class="table-wrap">
             <table>
@@ -1134,9 +1101,6 @@ body,
     document.getElementById("periodo").textContent =
       `Período: ${dados.relatorio.periodo.inicio} a ${dados.relatorio.periodo.fim}`;
 
-    document.getElementById("responsavel").textContent =
-      dados.relatorio.responsavel;
-
     document.getElementById("tituloAnterior").textContent =
       `Estoque em ${dados.estoque.dataAnterior}`;
 
@@ -1300,12 +1264,9 @@ body,
         })
         .join("");
 
-    document.getElementById("rodape").textContent =
-      `Controle realizado com responsabilidade e atenção aos detalhes. Relatório gerado em: ${dados.relatorio.geradoEm}`;
+    document.getElementById("rodape").innerHTML =
+      `Controle realizado com responsabilidade e atenção aos detalhes. Relatório gerado em: ${dados.relatorio.geradoEm}<br>By ${dados.relatorio.responsavel}`;
   </script>
-
-</body>
-</html>
 
 </body>
 </html>
