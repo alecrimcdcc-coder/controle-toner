@@ -687,19 +687,13 @@ body,
             <table>
 
               <thead>
-                <tr>
-                  <th>Modelo</th>
-                  <th>Quantidade</th>
-                </tr>
+                <tr id="cabecalhoEstoqueMetalBronze"></tr>
               </thead>
 
               <tbody id="corpoEstoqueMetalBronze"></tbody>
 
               <tfoot>
-                <tr>
-                  <td>Total</td>
-                  <td id="totalEstoqueMetalBronze"></td>
-                </tr>
+                <tr id="totalEstoqueMetalBronze"></tr>
               </tfoot>
 
             </table>
@@ -707,7 +701,7 @@ body,
         </div>
 
         <div class="box" id="consumoToner">
-          <h2>Consumo de Toner - Julho</h2>
+          <h2>Consumo de Toner - Agosto</h2>
 
           <div class="table-wrap">
             <table>
@@ -864,39 +858,39 @@ body,
     const dados = {
       relatorio: {
         periodo: {
-          inicio: "14/07/2026",
-          fim: "25/07/2026"
+          inicio: "01/08/2026",
+          fim: "08/08/2026"
         },
 
         responsavel: "Eduardo Alecrim",
 
-        geradoEm: "08/08/2026 às 12:00"
+        geradoEm: "08/08/2026"
       },
 
       estoque: {
-        dataAnterior: "14/07/2026",
-        dataAtual: "25/07/2026",
+        dataAnterior: "01/08/2026",
+        dataAtual: "08/08/2026",
 
         itens: [
           {
-            modelo: "12A (Q2612A)",
+            modelo: "12A",
+            anterior: 8,
+            atual: 8
+          },
+          {
+            modelo: "78A",
+            anterior: 10,
+            atual: 11
+          },
+          {
+            modelo: "UNIVERSAL",
             anterior: 7,
             atual: 6
           },
           {
-            modelo: "78A (CE278A)",
-            anterior: 7,
-            atual: 7
-          },
-          {
-            modelo: "UNIVERSAL",
+            modelo: "83A",
             anterior: 4,
-            atual: 2
-          },
-          {
-            modelo: "83A (CF283A)",
-            anterior: 4,
-            atual: 3
+            atual: 4
           },
           {
             modelo: "TN 2340",
@@ -906,7 +900,7 @@ body,
           {
             modelo: "SP3710",
             anterior: 2,
-            atual: 1
+            atual: 2
           },
           {
             modelo: "DR2340",
@@ -916,56 +910,53 @@ body,
           {
             modelo: "P550X",
             anterior: 1,
-            atual: 0
+            atual: 1
           },
           {
-            modelo: "CF217A (P-1085)",
-            anterior: 0,
-            atual: 2
+            modelo: "CF217A",
+            anterior: 4,
+            atual: 1
           },
           {
             modelo: "D203U",
             anterior: 0,
-            atual: 0
+            atual: 1
           },
           {
             modelo: "DRCF219A",
-            anterior: 1,
-            atual: 2
-          },
-          {
-            modelo: "BQ-CF512A",
-            anterior: 0,
-            atual: 2
+            anterior: 2,
+            atual: 0
           }
         ]
       },
 
       estoqueMetalBronze: [
-        { modelo: "CE278A", quantidade: 47 },
-        { modelo: "CF283A", quantidade: 4 },
-        { modelo: "UNIVERSAL", quantidade: 56 },
-        { modelo: "Q2612A", quantidade: 20 },
-        { modelo: "DR CF219A", quantidade: 2 },
-        { modelo: "DR TN2340", quantidade: 4 },
-        { modelo: "SP 3710", quantidade: 6 },
-        { modelo: "TN 2340", quantidade: 1 },
-        { modelo: "D203U", quantidade: 2 },
-        { modelo: "P-550-X", quantidade: 2 },
-        { modelo: "HP 505X/280X", quantidade: 1 }
+        { modelo: "12A", anterior: 13, atual: 13 },
+        { modelo: "78A", anterior: 43, atual: 44 },
+        { modelo: "UNIVERSAL", anterior: 47, atual: 47 },
+        { modelo: "83A", anterior: 2, atual: 2 },
+        { modelo: "TN 2340", anterior: 1, atual: 1 },
+        { modelo: "DRTN2340", anterior: 4, atual: 4 },
+        { modelo: "SP3710", anterior: 5, atual: 5 },
+        { modelo: "HP 217A", anterior: 0, atual: 0 },
+        { modelo: "DRCF219A", anterior: 0, atual: 0 },
+        { modelo: "BQ-500X", anterior: 0, atual: 0 },
+        { modelo: "D203U", anterior: 0, atual: 0 },
+        { modelo: "505X", anterior: 1, atual: 1 },
+        { modelo: "550X", anterior: 1, atual: 1 }
       ],
 
       consumo: [
         {
           area: "ADMINISTRATIVO",
-          local: "TESOURARIA",
-          toner: "UNIVERSAL",
+          local: "LICITAÇÕES",
+          toner: "TN2340",
           quantidade: 1
         },
         {
-          area: "ADMINISTRATIVO",
-          local: "COMPRAS",
-          toner: "78A",
+          area: "COMERCIAL",
+          local: "CAIXA 05 - MATRIZ",
+          toner: "UNIVERSAL",
           quantidade: 1
         },
         {
@@ -975,89 +966,35 @@ body,
           quantidade: 1
         },
         {
-          area: "COMERCIAL",
-          local: "CAIXAS - MATRIZ",
-          toner: "UNIVERSAL",
-          quantidade: 1
-        },
-        {
-          area: "LOGÍSTICA",
-          local: "COORDENAÇÃO LOGÍSTICA",
-          toner: "SP3710",
-          quantidade: 1
-        },
-        {
           area: "LOGÍSTICA",
           local: "EXPEDIÇÃO",
           toner: "12A",
-          quantidade: 3
-        },
-        {
-          area: "LOGÍSTICA",
-          local: "EXPEDIÇÃO - FILIAIS",
-          toner: "12A",
           quantidade: 1
         },
         {
-          area: "LOGÍSTICA",
-          local: "INVENTÁRIO",
-          toner: "12A",
-          quantidade: 1
-        },
-        {
-          area: "LOGÍSTICA",
-          local: "RETIFICA POSTERIOR",
-          toner: "SP3710",
-          quantidade: 1
-        },
-        {
-          area: "LOGÍSTICA",
-          local: "TROCA E DEVOLUÇÃO",
-          toner: "UNIVERSAL",
+          area: "DISTRIBUIDORA",
+          local: "VENDAS - DISTRIBUIDORA",
+          toner: "78A",
           quantidade: 2
         },
         {
-          area: "CIDADE NOVA",
-          local: "CAIXAS - CDN",
-          toner: "12A",
-          quantidade: 1
-        },
-        {
-          area: "CIDADE NOVA",
-          local: "CAIXA 02 - CDN",
+          area: "DISTRIBUIDORA",
+          local: "RECEBIMENTO - DISTRIBUIDORA",
           toner: "UNIVERSAL",
-          quantidade: 1
-        },
-        {
-          area: "CIDADE NOVA",
-          local: "MESA VINO - CDN",
-          toner: "UNIVERSAL",
-          quantidade: 1
-        },
-        {
-          area: "CENTRO",
-          local: "CAIXAS - CENTRO",
-          toner: "78A",
-          quantidade: 1
-        },
-        {
-          area: "CENTRO",
-          local: "BALCÃO DE GERÊNCIA - CENTRO",
-          toner: "78A",
-          quantidade: 1
+          quantidade: 2
         }
       ],
 
       destaques: [
-        "O estoque da Sala variou -1 unidade entre 14/07/2026 e 25/07/2026, uma redução de 3,4%.",
+        "O estoque da Sala variou -4 unidades entre 01/08/2026 e 08/08/2026, uma redução de 9,8%.",
 
-        "O modelo P550X zerou (de 1 para 0 unidade), enquanto CF217A e BQ-CF512A passaram a ser contabilizados na Sala, com 2 unidades cada.",
+        "CF217A caiu de 4 para 1 unidade e DRCF219A zerou (de 2 para 0), enquanto D203U passou de 0 para 1 unidade.",
 
-        "Das 2 unidades de UNIVERSAL em estoque na Sala, ambas estão marcadas como C/DEFEITO.",
+        "O modelo 78A na Sala subiu de 10 para 11 unidades no período.",
 
-        "No Metal Bronze, o Q2612A caiu de 21 para 20 unidades; os demais modelos permaneceram estáveis, com destaque para CE278A (47UN) e UNIVERSAL (56UN).",
+        "No Metal Bronze, o total avançou de 117 para 118 unidades (+0,9%), puxado pelo aumento de 78A (43→44).",
 
-        "D203U segue sem unidades disponíveis na Sala."
+        "O consumo total no período foi de 8 unidades, concentrado em UNIVERSAL (4 unidades, 50% do total)."
       ]
     };
 
@@ -1185,25 +1122,57 @@ body,
       <td>${formatarComSinal(variacao)}</td>
     `;
 
-    const totalEstoqueMetalBronze = somar(
+    const totalEstoqueMetalBronzeAnterior = somar(
       dados.estoqueMetalBronze,
-      "quantidade"
+      "anterior"
     );
+
+    const totalEstoqueMetalBronzeAtual = somar(
+      dados.estoqueMetalBronze,
+      "atual"
+    );
+
+    const variacaoMetalBronze =
+      totalEstoqueMetalBronzeAtual - totalEstoqueMetalBronzeAnterior;
+
+    document.getElementById("cabecalhoEstoqueMetalBronze").innerHTML = `
+      <th>Modelo</th>
+      <th>${dados.estoque.dataAnterior}</th>
+      <th>${dados.estoque.dataAtual}</th>
+      <th>Variação</th>
+    `;
 
     document.getElementById("corpoEstoqueMetalBronze").innerHTML =
       dados.estoqueMetalBronze
         .map((item) => {
+          const variacaoItem =
+            item.atual - item.anterior;
+
+          const classe =
+            variacaoItem < 0
+              ? "negativo"
+              : "";
+
           return `
             <tr>
               <td>${item.modelo}</td>
-              <td>${item.quantidade}</td>
+              <td>${item.anterior}</td>
+              <td>${item.atual}</td>
+
+              <td class="${classe}">
+                ${formatarComSinal(variacaoItem)}
+              </td>
             </tr>
           `;
         })
         .join("");
 
-    document.getElementById("totalEstoqueMetalBronze").textContent =
-      totalEstoqueMetalBronze;
+    document.getElementById("totalEstoqueMetalBronze").innerHTML = `
+      <td>Total</td>
+      <td>${totalEstoqueMetalBronzeAnterior}</td>
+      <td>${totalEstoqueMetalBronzeAtual}</td>
+      <td>${formatarComSinal(variacaoMetalBronze)}</td>
+    `;
 
     document.getElementById("corpoConsumo").innerHTML =
       dados.consumo
