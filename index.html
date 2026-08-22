@@ -746,6 +746,11 @@ body,
         </div>
 
         <div class="box">
+          <h2>Consumo por Setor</h2>
+          <div id="consumoArea"></div>
+        </div>
+
+        <div class="box">
           <h2>Destaques do Período</h2>
           <ul class="lista" id="destaques"></ul>
         </div>
@@ -858,34 +863,34 @@ body,
     const dados = {
       relatorio: {
         periodo: {
-          inicio: "01/08/2026",
-          fim: "08/08/2026"
+          inicio: "15/08/2026",
+          fim: "22/08/2026"
         },
 
         responsavel: "Eduardo Alecrim",
 
-        geradoEm: "08/08/2026"
+        geradoEm: "22/08/2026"
       },
 
       estoque: {
-        dataAnterior: "01/08/2026",
-        dataAtual: "08/08/2026",
+        dataAnterior: "15/08/2026",
+        dataAtual: "22/08/2026",
 
         itens: [
           {
             modelo: "12A",
-            anterior: 8,
-            atual: 8
+            anterior: 5,
+            atual: 2
           },
           {
             modelo: "78A",
-            anterior: 10,
-            atual: 11
+            anterior: 9,
+            atual: 9
           },
           {
             modelo: "UNIVERSAL",
-            anterior: 7,
-            atual: 6
+            anterior: 3,
+            atual: 2
           },
           {
             modelo: "83A",
@@ -894,13 +899,13 @@ body,
           },
           {
             modelo: "TN 2340",
-            anterior: 2,
-            atual: 2
+            anterior: 0,
+            atual: 1
           },
           {
             modelo: "SP3710",
-            anterior: 2,
-            atual: 2
+            anterior: 0,
+            atual: 1
           },
           {
             modelo: "DR2340",
@@ -914,18 +919,18 @@ body,
           },
           {
             modelo: "CF217A",
-            anterior: 4,
-            atual: 1
+            anterior: 0,
+            atual: 0
           },
           {
             modelo: "D203U",
-            anterior: 0,
-            atual: 1
+            anterior: 1,
+            atual: 0
           },
           {
             modelo: "DRCF219A",
-            anterior: 2,
-            atual: 0
+            anterior: 1,
+            atual: 2
           }
         ]
       },
@@ -955,9 +960,15 @@ body,
         },
         {
           area: "COMERCIAL",
-          local: "CAIXA 05 - MATRIZ",
+          local: "CAIXA 04 - MATRIZ",
           toner: "UNIVERSAL",
           quantidade: 1
+        },
+        {
+          area: "COMERCIAL",
+          local: "CAIXA 05 - MATRIZ",
+          toner: "UNIVERSAL",
+          quantidade: 2
         },
         {
           area: "COMERCIAL",
@@ -966,8 +977,26 @@ body,
           quantidade: 1
         },
         {
+          area: "COMERCIAL",
+          local: "CAIXAS 03 E 01 - MATRIZ",
+          toner: "UNIVERSAL",
+          quantidade: 1
+        },
+        {
           area: "LOGÍSTICA",
           local: "EXPEDIÇÃO",
+          toner: "12A",
+          quantidade: 3
+        },
+        {
+          area: "LOGÍSTICA",
+          local: "EXPEDIÇÃO - DISTRIBUIDORA",
+          toner: "UNIVERSAL",
+          quantidade: 1
+        },
+        {
+          area: "CIDADE NOVA",
+          local: "CAIXAS - CDN",
           toner: "12A",
           quantidade: 1
         },
@@ -986,15 +1015,19 @@ body,
       ],
 
       destaques: [
-        "O estoque da Sala variou -4 unidades entre 01/08/2026 e 08/08/2026, uma redução de 9,8%.",
+        "O estoque da Sala variou -2 unidades entre 15/08/2026 e 22/08/2026, uma redução de 8,0%.",
 
-        "CF217A caiu de 4 para 1 unidade e DRCF219A zerou (de 2 para 0), enquanto D203U passou de 0 para 1 unidade.",
+        "12A teve a maior queda do período, caindo de 5 para 2 unidades (-3).",
 
-        "O modelo 78A na Sala subiu de 10 para 11 unidades no período.",
+        "TN 2340 e SP3710 saíram de 0 e passaram a 1 unidade cada; D203U zerou (de 1 para 0).",
 
-        "No Metal Bronze, o total avançou de 117 para 118 unidades (+0,9%), puxado pelo aumento de 78A (43→44).",
+        "DRCF219A subiu de 1 para 2 unidades no período.",
 
-        "O consumo total no período foi de 8 unidades, concentrado em UNIVERSAL (4 unidades, 50% do total)."
+        "O consumo total no período foi de 15 unidades, concentrado em UNIVERSAL (8 unidades, 53,3% do total).",
+
+        "COMERCIAL foi o setor que mais consumiu tonner (5 unidades), seguido por LOGÍSTICA (4) e DISTRIBUIDORA (4).",
+
+        "O estoque do Metal Bronze ainda não foi reconferido neste período (valores mantidos da última contagem)."
       ]
     };
 
@@ -1223,6 +1256,50 @@ body,
                   style="width: ${percentualModelo}%"
                 >
                   ${percentualModelo
+                    .toFixed(1)
+                    .replace(".", ",")}%
+                </div>
+
+              </div>
+
+            </div>
+          `;
+        })
+        .join("");
+
+    const consumoPorArea =
+      dados.consumo.reduce((resultado, item) => {
+        resultado[item.area] =
+          (resultado[item.area] || 0) +
+          Number(item.quantidade || 0);
+
+        return resultado;
+      }, {});
+
+    document.getElementById("consumoArea").innerHTML =
+      Object.entries(consumoPorArea)
+        .sort((a, b) => b[1] - a[1])
+        .map(([area, quantidade]) => {
+          const percentualArea =
+            totalConsumido === 0
+              ? 0
+              : (quantidade / totalConsumido) * 100;
+
+          return `
+            <div class="barra">
+
+              <div class="barra-cabecalho">
+                <strong>${area}</strong>
+                <span>${quantidade} unidade(s)</span>
+              </div>
+
+              <div class="barra-interna">
+
+                <div
+                  class="barra-valor"
+                  style="width: ${percentualArea}%"
+                >
+                  ${percentualArea
                     .toFixed(1)
                     .replace(".", ",")}%
                 </div>
