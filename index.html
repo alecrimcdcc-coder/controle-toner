@@ -863,49 +863,49 @@ body,
     const dados = {
       relatorio: {
         periodo: {
-          inicio: "15/08/2026",
-          fim: "22/08/2026"
+          inicio: "22/08/2026",
+          fim: "04/09/2026"
         },
 
         responsavel: "Eduardo Alecrim",
 
-        geradoEm: "22/08/2026"
+        geradoEm: "04/09/2026"
       },
 
       estoque: {
-        dataAnterior: "15/08/2026",
-        dataAtual: "22/08/2026",
+        dataAnterior: "22/08/2026",
+        dataAtual: "04/09/2026",
 
         itens: [
           {
             modelo: "12A",
-            anterior: 5,
-            atual: 2
+            anterior: 2,
+            atual: 10
           },
           {
             modelo: "78A",
             anterior: 9,
-            atual: 9
+            atual: 7
           },
           {
             modelo: "UNIVERSAL",
-            anterior: 3,
-            atual: 2
+            anterior: 2,
+            atual: 5
           },
           {
             modelo: "83A",
             anterior: 4,
-            atual: 4
+            atual: 3
           },
           {
             modelo: "TN 2340",
-            anterior: 0,
+            anterior: 1,
             atual: 1
           },
           {
             modelo: "SP3710",
-            anterior: 0,
-            atual: 1
+            anterior: 1,
+            atual: 2
           },
           {
             modelo: "DR2340",
@@ -920,29 +920,34 @@ body,
           {
             modelo: "CF217A",
             anterior: 0,
-            atual: 0
+            atual: 1
           },
           {
             modelo: "D203U",
-            anterior: 1,
-            atual: 0
+            anterior: 0,
+            atual: 1
           },
           {
             modelo: "DRCF219A",
-            anterior: 1,
+            anterior: 2,
+            atual: 2
+          },
+          {
+            modelo: "P-1085",
+            anterior: 0,
             atual: 2
           }
         ]
       },
 
       estoqueMetalBronze: [
-        { modelo: "12A", anterior: 13, atual: 13 },
-        { modelo: "78A", anterior: 43, atual: 44 },
-        { modelo: "UNIVERSAL", anterior: 47, atual: 47 },
+        { modelo: "12A", anterior: 13, atual: 3 },
+        { modelo: "78A", anterior: 44, atual: 41 },
+        { modelo: "UNIVERSAL", anterior: 47, atual: 31 },
         { modelo: "83A", anterior: 2, atual: 2 },
         { modelo: "TN 2340", anterior: 1, atual: 1 },
         { modelo: "DRTN2340", anterior: 4, atual: 4 },
-        { modelo: "SP3710", anterior: 5, atual: 5 },
+        { modelo: "SP3710", anterior: 5, atual: 4 },
         { modelo: "HP 217A", anterior: 0, atual: 0 },
         { modelo: "DRCF219A", anterior: 0, atual: 0 },
         { modelo: "BQ-500X", anterior: 0, atual: 0 },
@@ -1015,19 +1020,19 @@ body,
       ],
 
       destaques: [
-        "O estoque da Sala variou -2 unidades entre 15/08/2026 e 22/08/2026, uma redução de 8,0%.",
+        "O estoque da Sala TI subiu de 23 para 36 unidades entre 22/08/2026 e 04/09/2026, um aumento de 56,5%.",
 
-        "12A teve a maior queda do período, caindo de 5 para 2 unidades (-3).",
+        "12A teve o maior crescimento do período, saltando de 2 para 10 unidades (+8).",
 
-        "TN 2340 e SP3710 saíram de 0 e passaram a 1 unidade cada; D203U zerou (de 1 para 0).",
+        "Novo modelo P-1085 passou a ser controlado na Sala TI, com 2 unidades em estoque.",
 
-        "DRCF219A subiu de 1 para 2 unidades no período.",
+        "O toner CF217A (217A) apresentou defeito: 1 unidade em estoque, mas indisponível para uso — estoque útil da Sala TI é de 35 unidades.",
 
-        "O consumo total no período foi de 15 unidades, concentrado em UNIVERSAL (8 unidades, 53,3% do total).",
+        "D203U voltou a ter estoque na Sala TI, saindo de 0 para 1 unidade.",
 
-        "COMERCIAL foi o setor que mais consumiu tonner (5 unidades), seguido por LOGÍSTICA (4) e DISTRIBUIDORA (4).",
+        "No Metal Bronze, UNIVERSAL caiu de 47 para 31 unidades (-16) e 78A caiu de 44 para 41 (-3); 12A também recuou de 13 para 3 (-10).",
 
-        "O estoque do Metal Bronze ainda não foi reconferido neste período (valores mantidos da última contagem)."
+        "217A e D203U seguem sem estoque no Metal Bronze (0 unidades)."
       ]
     };
 
