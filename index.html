@@ -644,8 +644,9 @@ body,
       </article>
 
       <article class="card">
-        <h2>Consumo no período</h2>
+        <h2 id="tituloConsumoCard">Consumo mensal</h2>
         <div class="numero" id="consumoTotal"></div>
+        <small id="periodoConsumo"></small>
       </article>
 
       <article class="card">
@@ -701,7 +702,7 @@ body,
         </div>
 
         <div class="box" id="consumoToner">
-          <h2>Consumo de Toner - Agosto</h2>
+          <h2 id="tituloConsumoMensal">Consumo de Toner - Setembro/2026</h2>
 
           <div class="table-wrap">
             <table>
@@ -711,6 +712,7 @@ body,
                   <th>Área</th>
                   <th>Local</th>
                   <th>Toner</th>
+                  <th>Data(s)</th>
                   <th>Quantidade</th>
                 </tr>
               </thead>
@@ -719,7 +721,7 @@ body,
 
               <tfoot>
                 <tr>
-                  <td colspan="3">Total consumido</td>
+                  <td colspan="4">Total consumido no mês</td>
                   <td id="totalConsumoTabela"></td>
                 </tr>
               </tfoot>
@@ -863,183 +865,209 @@ body,
     const dados = {
       relatorio: {
         periodo: {
-          inicio: "22/08/2026",
-          fim: "04/09/2026"
+          inicio: "05/09/2026",
+          fim: "19/09/2026"
         },
 
         responsavel: "Eduardo Alecrim",
 
-        geradoEm: "04/09/2026"
+        geradoEm: "19/09/2026"
       },
 
-      estoque: {
-        dataAnterior: "22/08/2026",
-        dataAtual: "04/09/2026",
-
-        itens: [
+      /*
+       * ESTOQUE DA SALA
+       * O histórico abaixo segue as conferências semanais informadas.
+       * A antiga referência de 04/09 foi substituída por 05/09/2026.
+       * As comparações dos cards usam automaticamente as duas últimas
+       * conferências preenchidas (12/09 e 19/09).
+       */
+      estoqueSala: {
+        historico: [
           {
-            modelo: "12A",
-            anterior: 2,
-            atual: 10
+            data: "05/09/2026",
+            itens: {
+              "12A": 0,
+              "78A": 0,
+              "UNIVERSAL": 0,
+              "83A": 0,
+              "TN 2340": 0,
+              "SP3710": 0,
+              "DR2340": 0,
+              "P550X": 0,
+              "CF217A": 0,
+              "D203U": 0,
+              "DRCF219A": 0
+            }
           },
           {
-            modelo: "78A",
-            anterior: 9,
-            atual: 7
+            data: "12/09/2026",
+            itens: {
+              "12A": 7,
+              "78A": 8,
+              "UNIVERSAL": 4,
+              "83A": 3,
+              "TN 2340": 1,
+              "SP3710": 2,
+              "DR2340": 1,
+              "P550X": 1,
+              "CF217A": 2,
+              "D203U": 1,
+              "DRCF219A": 2
+            }
           },
           {
-            modelo: "UNIVERSAL",
-            anterior: 2,
-            atual: 5
-          },
-          {
-            modelo: "83A",
-            anterior: 4,
-            atual: 3
-          },
-          {
-            modelo: "TN 2340",
-            anterior: 1,
-            atual: 1
-          },
-          {
-            modelo: "SP3710",
-            anterior: 1,
-            atual: 2
-          },
-          {
-            modelo: "DR2340",
-            anterior: 1,
-            atual: 1
-          },
-          {
-            modelo: "P550X",
-            anterior: 1,
-            atual: 1
-          },
-          {
-            modelo: "CF217A",
-            anterior: 0,
-            atual: 1
-          },
-          {
-            modelo: "D203U",
-            anterior: 0,
-            atual: 1
-          },
-          {
-            modelo: "DRCF219A",
-            anterior: 2,
-            atual: 2
-          },
-          {
-            modelo: "P-1085",
-            anterior: 0,
-            atual: 2
+            data: "19/09/2026",
+            itens: {
+              "12A": 6,
+              "78A": 7,
+              "UNIVERSAL": 0,
+              "83A": 3,
+              "TN 2340": 1,
+              "SP3710": 1,
+              "DR2340": 1,
+              "P550X": 1,
+              "CF217A": 2,
+              "D203U": 0,
+              "DRCF219A": 2
+            }
           }
         ]
       },
 
-      estoqueMetalBronze: [
-        { modelo: "12A", anterior: 13, atual: 3 },
-        { modelo: "78A", anterior: 44, atual: 41 },
-        { modelo: "UNIVERSAL", anterior: 47, atual: 31 },
-        { modelo: "83A", anterior: 2, atual: 2 },
-        { modelo: "TN 2340", anterior: 1, atual: 1 },
-        { modelo: "DRTN2340", anterior: 4, atual: 4 },
-        { modelo: "SP3710", anterior: 5, atual: 4 },
-        { modelo: "HP 217A", anterior: 0, atual: 0 },
-        { modelo: "DRCF219A", anterior: 0, atual: 0 },
-        { modelo: "BQ-500X", anterior: 0, atual: 0 },
-        { modelo: "D203U", anterior: 0, atual: 0 },
-        { modelo: "505X", anterior: 1, atual: 1 },
-        { modelo: "550X", anterior: 1, atual: 1 }
-      ],
+      /*
+       * ESTOQUE ATUAL - METAL BRONZE
+       * Quantidades da conferência enviada em 19/09/2026.
+       */
+      estoqueMetalBronze: {
+        data: "19/09/2026",
+        itens: [
+          { modelo: "78A", quantidade: 41 },
+          { modelo: "UNIVERSAL", quantidade: 22 },
+          { modelo: "DR TN2340", quantidade: 4 },
+          { modelo: "3710", quantidade: 4 },
+          { modelo: "12A", quantidade: 3 },
+          { modelo: "83A", quantidade: 2 },
+          { modelo: "550-X", quantidade: 1 },
+          { modelo: "505X", quantidade: 1 },
+          { modelo: "TN2340", quantidade: 1 },
+          { modelo: "217A", quantidade: 0 },
+          { modelo: "219A", quantidade: 0 },
+          { modelo: "D203U", quantidade: 0 }
+        ]
+      },
 
-      consumo: [
+      /*
+       * CONTROLE DE CONSUMO
+       * Cada data preenchida equivale a 1 unidade utilizada.
+       * O painel filtra automaticamente somente as datas do mês/ano
+       * da data de geração do relatório e ignora datas futuras.
+       */
+      controleConsumo: [
         {
           area: "ADMINISTRATIVO",
-          local: "LICITAÇÕES",
-          toner: "TN2340",
-          quantidade: 1
+          local: "ADMINISTRAÇÃO",
+          toner: "D203U",
+          datas: ["02/09/2026"]
+        },
+        {
+          area: "ADMINISTRATIVO",
+          local: "TESOURARIA",
+          toner: "UNIVERSAL",
+          datas: ["08/09/2026"]
+        },
+        {
+          area: "ADMINISTRATIVO",
+          local: "MATHEUS",
+          toner: "UNIVERSAL",
+          datas: ["10/09/2026"]
         },
         {
           area: "COMERCIAL",
           local: "CAIXA 04 - MATRIZ",
           toner: "UNIVERSAL",
-          quantidade: 1
+          datas: ["03/09/2026", "18/09/2026"]
         },
         {
           area: "COMERCIAL",
-          local: "CAIXA 05 - MATRIZ",
-          toner: "UNIVERSAL",
-          quantidade: 2
-        },
-        {
-          area: "COMERCIAL",
-          local: "CAIXA 02 - MATRIZ",
-          toner: "UNIVERSAL",
-          quantidade: 1
-        },
-        {
-          area: "COMERCIAL",
-          local: "CAIXAS 03 E 01 - MATRIZ",
-          toner: "UNIVERSAL",
-          quantidade: 1
+          local: "BALCÃO INDUSTRIAL",
+          toner: "83A",
+          datas: ["01/09/2026"]
         },
         {
           area: "LOGÍSTICA",
-          local: "EXPEDIÇÃO",
+          local: "INVENTÁRIO",
           toner: "12A",
-          quantidade: 3
+          datas: ["08/09/2026"]
         },
         {
           area: "LOGÍSTICA",
-          local: "EXPEDIÇÃO - DISTRIBUIDORA",
+          local: "TROCA E DEVOLUÇÃO",
           toner: "UNIVERSAL",
-          quantidade: 1
+          datas: ["10/09/2026"]
         },
         {
           area: "CIDADE NOVA",
           local: "CAIXAS - CDN",
           toner: "12A",
-          quantidade: 1
+          datas: ["11/09/2026"]
+        },
+        {
+          area: "CIDADE NOVA",
+          local: "CAIXA 02 - CDN",
+          toner: "UNIVERSAL",
+          datas: ["11/09/2026"]
+        },
+        {
+          area: "CIDADE NOVA",
+          local: "MEZANINO - CDN",
+          toner: "UNIVERSAL",
+          datas: ["11/09/2026"]
+        },
+        {
+          area: "PARQUE 10",
+          local: "CAIXAS - P10",
+          toner: "UNIVERSAL",
+          datas: ["02/09/2026", "03/09/2026"]
+        },
+        {
+          area: "PARQUE 10",
+          local: "VENDAS - P10",
+          toner: "78A",
+          datas: ["02/09/2026", "03/09/2026"]
         },
         {
           area: "DISTRIBUIDORA",
           local: "VENDAS - DISTRIBUIDORA",
           toner: "78A",
-          quantidade: 2
+          datas: ["17/08/2026"]
         },
         {
           area: "DISTRIBUIDORA",
           local: "RECEBIMENTO - DISTRIBUIDORA",
           toner: "UNIVERSAL",
-          quantidade: 2
+          datas: ["09/09/2026", "01/09/2026"]
+        },
+        {
+          area: "DISTRIBUIDORA",
+          local: "EXPEDIÇÃO - DISTRIBUIDORA",
+          toner: "UNIVERSAL",
+          datas: ["17/08/2026", "17/08/2026"]
         }
-      ],
-
-      destaques: [
-        "O estoque da Sala TI subiu de 23 para 36 unidades entre 22/08/2026 e 04/09/2026, um aumento de 56,5%.",
-
-        "12A teve o maior crescimento do período, saltando de 2 para 10 unidades (+8).",
-
-        "Novo modelo P-1085 passou a ser controlado na Sala TI, com 2 unidades em estoque.",
-
-        "O toner CF217A (217A) apresentou defeito: 1 unidade em estoque, mas indisponível para uso — estoque útil da Sala TI é de 35 unidades.",
-
-        "D203U voltou a ter estoque na Sala TI, saindo de 0 para 1 unidade.",
-
-        "No Metal Bronze, UNIVERSAL caiu de 47 para 31 unidades (-16) e 78A caiu de 44 para 41 (-3); 12A também recuou de 13 para 3 (-10).",
-
-        "217A e D203U seguem sem estoque no Metal Bronze (0 unidades)."
       ]
     };
 
-    function somar(lista, campo) {
-      return lista.reduce((total, item) => {
-        return total + Number(item[campo] || 0);
-      }, 0);
+    const nomesMeses = [
+      "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+      "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+    ];
+
+    function parseDataBR(dataTexto) {
+      const [dia, mes, ano] = dataTexto.split("/").map(Number);
+      return new Date(ano, mes - 1, dia, 12, 0, 0);
+    }
+
+    function ordenarDatasBR(a, b) {
+      return parseDataBR(a) - parseDataBR(b);
     }
 
     function formatarComSinal(valor, casasDecimais = 0) {
@@ -1056,16 +1084,64 @@ body,
       return texto;
     }
 
-    const totalAnterior = somar(
-      dados.estoque.itens,
-      "anterior"
-    );
+    function somarObjeto(objeto) {
+      return Object.values(objeto || {}).reduce((total, valor) => {
+        return total + Number(valor || 0);
+      }, 0);
+    }
 
-    const totalAtual = somar(
-      dados.estoque.itens,
-      "atual"
-    );
+    function somar(lista, campo) {
+      return lista.reduce((total, item) => {
+        return total + Number(item[campo] || 0);
+      }, 0);
+    }
 
+    const dataGeracao = parseDataBR(dados.relatorio.geradoEm);
+    const mesReferencia = dataGeracao.getMonth();
+    const anoReferencia = dataGeracao.getFullYear();
+    const nomeMesReferencia = nomesMeses[mesReferencia];
+
+    /*
+     * Consumo mensal gerado automaticamente pelas datas preenchidas.
+     * Só entram datas do mesmo mês/ano do relatório e até a data de geração.
+     */
+    const consumoMensal = dados.controleConsumo
+      .map((item) => {
+        const datasValidas = (item.datas || [])
+          .filter((data) => {
+            const d = parseDataBR(data);
+            return (
+              d.getMonth() === mesReferencia &&
+              d.getFullYear() === anoReferencia &&
+              d <= dataGeracao
+            );
+          })
+          .sort(ordenarDatasBR);
+
+        return {
+          area: item.area,
+          local: item.local,
+          toner: item.toner,
+          datas: datasValidas,
+          quantidade: datasValidas.length
+        };
+      })
+      .filter((item) => item.quantidade > 0);
+
+    const totalConsumido = somar(consumoMensal, "quantidade");
+
+    /*
+     * Seleciona automaticamente as conferências da sala até a data do relatório.
+     */
+    const conferenciasSala = dados.estoqueSala.historico
+      .filter((conferencia) => parseDataBR(conferencia.data) <= dataGeracao)
+      .sort((a, b) => parseDataBR(a.data) - parseDataBR(b.data));
+
+    const conferenciaAtual = conferenciasSala[conferenciasSala.length - 1];
+    const conferenciaAnterior = conferenciasSala[conferenciasSala.length - 2] || conferenciaAtual;
+
+    const totalAnterior = somarObjeto(conferenciaAnterior.itens);
+    const totalAtual = somarObjeto(conferenciaAtual.itens);
     const variacao = totalAtual - totalAnterior;
 
     const percentualVariacao =
@@ -1073,28 +1149,31 @@ body,
         ? 0
         : (variacao / totalAnterior) * 100;
 
-    const totalConsumido = somar(
-      dados.consumo,
-      "quantidade"
-    );
-
     const mediaEstoque =
       (totalAnterior + totalAtual) / 2;
 
+    const primeiroDiaMes = `01/${String(mesReferencia + 1).padStart(2, "0")}/${anoReferencia}`;
+
     document.getElementById("periodo").textContent =
-      `Período: ${dados.relatorio.periodo.inicio} a ${dados.relatorio.periodo.fim}`;
+      `Estoque: ${dados.relatorio.periodo.inicio} a ${dados.relatorio.periodo.fim} • Consumo mensal: ${primeiroDiaMes} a ${dados.relatorio.geradoEm}`;
 
     document.getElementById("tituloAnterior").textContent =
-      `Estoque em ${dados.estoque.dataAnterior}`;
+      `Estoque em ${conferenciaAnterior.data}`;
 
     document.getElementById("tituloAtual").textContent =
-      `Estoque em ${dados.estoque.dataAtual}`;
+      `Estoque em ${conferenciaAtual.data}`;
 
     document.getElementById("totalAnterior").textContent =
       totalAnterior;
 
     document.getElementById("totalAtual").textContent =
       totalAtual;
+
+    document.getElementById("tituloConsumoCard").textContent =
+      `Consumo em ${nomeMesReferencia}/${anoReferencia}`;
+
+    document.getElementById("periodoConsumo").textContent =
+      `${primeiroDiaMes} a ${dados.relatorio.geradoEm}`;
 
     document.getElementById("consumoTotal").textContent =
       totalConsumido;
@@ -1104,6 +1183,8 @@ body,
 
     elementoVariacao.textContent =
       formatarComSinal(variacao);
+
+    elementoVariacao.classList.remove("positivo", "negativo");
 
     if (variacao > 0) {
       elementoVariacao.classList.add("positivo");
@@ -1121,18 +1202,31 @@ body,
         .toFixed(1)
         .replace(".", ",");
 
+    /*
+     * TABELA - ESTOQUE DA SALA
+     * Exibe todas as conferências registradas até hoje e uma coluna
+     * de variação entre as duas últimas.
+     */
+    const modelosSala = Array.from(
+      new Set(
+        conferenciasSala.flatMap((conferencia) =>
+          Object.keys(conferencia.itens || {})
+        )
+      )
+    );
+
     document.getElementById("cabecalhoEstoque").innerHTML = `
       <th>Modelo</th>
-      <th>${dados.estoque.dataAnterior}</th>
-      <th>${dados.estoque.dataAtual}</th>
-      <th>Variação</th>
+      ${conferenciasSala.map((conferencia) => `<th>${conferencia.data}</th>`).join("")}
+      <th>Variação ${conferenciaAnterior.data} → ${conferenciaAtual.data}</th>
     `;
 
     document.getElementById("corpoEstoque").innerHTML =
-      dados.estoque.itens
-        .map((item) => {
-          const variacaoItem =
-            item.atual - item.anterior;
+      modelosSala
+        .map((modelo) => {
+          const anterior = Number(conferenciaAnterior.itens[modelo] || 0);
+          const atual = Number(conferenciaAtual.itens[modelo] || 0);
+          const variacaoItem = atual - anterior;
 
           const classe =
             variacaoItem < 0
@@ -1141,10 +1235,10 @@ body,
 
           return `
             <tr>
-              <td>${item.modelo}</td>
-              <td>${item.anterior}</td>
-              <td>${item.atual}</td>
-
+              <td>${modelo}</td>
+              ${conferenciasSala
+                .map((conferencia) => `<td>${Number(conferencia.itens[modelo] || 0)}</td>`)
+                .join("")}
               <td class="${classe}">
                 ${formatarComSinal(variacaoItem)}
               </td>
@@ -1153,52 +1247,43 @@ body,
         })
         .join("");
 
+    const totaisConferenciasSala = conferenciasSala.map((conferencia) =>
+      somarObjeto(conferencia.itens)
+    );
+
     document.getElementById("totalEstoque").innerHTML = `
       <td>Total</td>
-      <td>${totalAnterior}</td>
-      <td>${totalAtual}</td>
+      ${totaisConferenciasSala.map((total) => `<td>${total}</td>`).join("")}
       <td>${formatarComSinal(variacao)}</td>
     `;
 
-    const totalEstoqueMetalBronzeAnterior = somar(
-      dados.estoqueMetalBronze,
-      "anterior"
+    /*
+     * TABELA - METAL BRONZE
+     * A imagem enviada contém um retrato atual do estoque, por isso
+     * a tabela mostra a quantidade atual sem inventar uma conferência anterior.
+     */
+    const totalEstoqueMetalBronze = somar(
+      dados.estoqueMetalBronze.itens,
+      "quantidade"
     );
-
-    const totalEstoqueMetalBronzeAtual = somar(
-      dados.estoqueMetalBronze,
-      "atual"
-    );
-
-    const variacaoMetalBronze =
-      totalEstoqueMetalBronzeAtual - totalEstoqueMetalBronzeAnterior;
 
     document.getElementById("cabecalhoEstoqueMetalBronze").innerHTML = `
       <th>Modelo</th>
-      <th>${dados.estoque.dataAnterior}</th>
-      <th>${dados.estoque.dataAtual}</th>
-      <th>Variação</th>
+      <th>${dados.estoqueMetalBronze.data}</th>
+      <th>Status</th>
     `;
 
     document.getElementById("corpoEstoqueMetalBronze").innerHTML =
-      dados.estoqueMetalBronze
+      dados.estoqueMetalBronze.itens
         .map((item) => {
-          const variacaoItem =
-            item.atual - item.anterior;
-
-          const classe =
-            variacaoItem < 0
-              ? "negativo"
-              : "";
+          const semEstoque = Number(item.quantidade) === 0;
 
           return `
             <tr>
               <td>${item.modelo}</td>
-              <td>${item.anterior}</td>
-              <td>${item.atual}</td>
-
-              <td class="${classe}">
-                ${formatarComSinal(variacaoItem)}
+              <td class="${semEstoque ? "negativo" : ""}">${item.quantidade}</td>
+              <td class="${semEstoque ? "negativo" : ""}">
+                ${semEstoque ? "SEM ESTOQUE" : "Disponível"}
               </td>
             </tr>
           `;
@@ -1207,19 +1292,31 @@ body,
 
     document.getElementById("totalEstoqueMetalBronze").innerHTML = `
       <td>Total</td>
-      <td>${totalEstoqueMetalBronzeAnterior}</td>
-      <td>${totalEstoqueMetalBronzeAtual}</td>
-      <td>${formatarComSinal(variacaoMetalBronze)}</td>
+      <td>${totalEstoqueMetalBronze}</td>
+      <td>${dados.estoqueMetalBronze.itens.filter((item) => item.quantidade === 0).length} modelo(s) zerado(s)</td>
     `;
 
+    /*
+     * TABELA - CONSUMO MENSAL
+     * A quantidade é a contagem das datas preenchidas na linha.
+     */
+    document.getElementById("tituloConsumoMensal").textContent =
+      `Consumo de Toner - ${nomeMesReferencia}/${anoReferencia}`;
+
     document.getElementById("corpoConsumo").innerHTML =
-      dados.consumo
+      consumoMensal
+        .sort((a, b) => {
+          const primeiraDataA = a.datas[0] ? parseDataBR(a.datas[0]) : new Date(0);
+          const primeiraDataB = b.datas[0] ? parseDataBR(b.datas[0]) : new Date(0);
+          return primeiraDataA - primeiraDataB;
+        })
         .map((item) => {
           return `
             <tr>
               <td>${item.area}</td>
               <td>${item.local}</td>
               <td>${item.toner}</td>
+              <td>${item.datas.join(" • ")}</td>
               <td>${item.quantidade}</td>
             </tr>
           `;
@@ -1230,7 +1327,7 @@ body,
       totalConsumido;
 
     const consumoPorModelo =
-      dados.consumo.reduce((resultado, item) => {
+      consumoMensal.reduce((resultado, item) => {
         resultado[item.toner] =
           (resultado[item.toner] || 0) +
           Number(item.quantidade || 0);
@@ -1240,6 +1337,7 @@ body,
 
     document.getElementById("consumoModelo").innerHTML =
       Object.entries(consumoPorModelo)
+        .sort((a, b) => b[1] - a[1])
         .map(([modelo, quantidade]) => {
           const percentualModelo =
             totalConsumido === 0
@@ -1273,7 +1371,7 @@ body,
         .join("");
 
     const consumoPorArea =
-      dados.consumo.reduce((resultado, item) => {
+      consumoMensal.reduce((resultado, item) => {
         resultado[item.area] =
           (resultado[item.area] || 0) +
           Number(item.quantidade || 0);
@@ -1316,8 +1414,38 @@ body,
         })
         .join("");
 
+    /*
+     * Destaques também são calculados a partir dos dados atuais,
+     * evitando textos antigos ficarem divergentes do painel.
+     */
+    const modelosZeradosSala = modelosSala.filter(
+      (modelo) => Number(conferenciaAtual.itens[modelo] || 0) === 0
+    );
+
+    const modelosZeradosMetal = dados.estoqueMetalBronze.itens
+      .filter((item) => Number(item.quantidade) === 0)
+      .map((item) => item.modelo);
+
+    const rankingModelos = Object.entries(consumoPorModelo)
+      .sort((a, b) => b[1] - a[1]);
+
+    const modeloMaisConsumido = rankingModelos[0] || ["Sem consumo", 0];
+
+    const destaques = [
+      `Sala TI: ${totalAnterior} → ${totalAtual} unidades entre ${conferenciaAnterior.data} e ${conferenciaAtual.data} (${formatarComSinal(variacao)}; ${formatarComSinal(percentualVariacao, 1)}%).`,
+      `Consumo mensal calculado pelas datas preenchidas: ${totalConsumido} unidade(s) de ${primeiroDiaMes} até ${dados.relatorio.geradoEm}.`,
+      `Modelo mais consumido no mês: ${modeloMaisConsumido[0]} com ${modeloMaisConsumido[1]} unidade(s).`,
+      `Estoque Metal Bronze em ${dados.estoqueMetalBronze.data}: ${totalEstoqueMetalBronze} unidade(s) no total.`,
+      modelosZeradosSala.length
+        ? `Sem estoque na Sala TI: ${modelosZeradosSala.join(", ")}.`
+        : "Sala TI sem modelos zerados.",
+      modelosZeradosMetal.length
+        ? `Sem estoque no Metal Bronze: ${modelosZeradosMetal.join(", ")}.`
+        : "Metal Bronze sem modelos zerados."
+    ];
+
     document.getElementById("destaques").innerHTML =
-      dados.destaques
+      destaques
         .map((texto) => {
           return `<li>${texto}</li>`;
         })
