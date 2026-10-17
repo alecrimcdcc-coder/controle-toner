@@ -702,7 +702,7 @@ body,
         </div>
 
         <div class="box" id="consumoToner">
-          <h2 id="tituloConsumoMensal">Consumo de Toner - Setembro/2026</h2>
+          <h2 id="tituloConsumoMensal">Consumo de Toner</h2>
 
           <div class="table-wrap">
             <table>
@@ -865,94 +865,77 @@ body,
     const dados = {
       relatorio: {
         periodo: {
-          inicio: "05/09/2026",
-          fim: "19/09/2026"
+          inicio: "10/10/2026",
+          fim: "17/10/2026"
         },
 
         responsavel: "Eduardo Alecrim",
 
-        geradoEm: "19/09/2026"
+        geradoEm: "17/10/2026"
       },
 
       /*
-       * ESTOQUE DA SALA
-       * O histórico abaixo segue as conferências semanais informadas.
-       * A antiga referência de 04/09 foi substituída por 05/09/2026.
-       * As comparações dos cards usam automaticamente as duas últimas
-       * conferências preenchidas (12/09 e 19/09).
+       * CONFERÊNCIAS DE ESTOQUE – SALA TI
+       * Registros anteriores preservados; 03/10, 24/10 e 31/10
+       * estavam em branco na planilha e não são tratados como zero.
+       * A imagem da planilha é a referência para as datas e quantidades.
        */
       estoqueSala: {
         historico: [
           {
             data: "05/09/2026",
-            itens: {
-              "12A": 0,
-              "78A": 0,
-              "UNIVERSAL": 0,
-              "83A": 0,
-              "TN 2340": 0,
-              "SP3710": 0,
-              "DR2340": 0,
-              "P550X": 0,
-              "CF217A": 0,
-              "D203U": 0,
-              "DRCF219A": 0
-            }
+            itens: { "12A": 0, "78A": 0, "UNIVERSAL": 0, "83A": 0,
+              "TN 2340": 0, "SP3710": 0, "DR2340": 0, "P550X": 0,
+              "CF217A": 0, "D203U": 0, "DRCF219A": 0 }
           },
           {
             data: "12/09/2026",
-            itens: {
-              "12A": 7,
-              "78A": 8,
-              "UNIVERSAL": 4,
-              "83A": 3,
-              "TN 2340": 1,
-              "SP3710": 2,
-              "DR2340": 1,
-              "P550X": 1,
-              "CF217A": 2,
-              "D203U": 1,
-              "DRCF219A": 2
-            }
+            itens: { "12A": 7, "78A": 8, "UNIVERSAL": 4, "83A": 3,
+              "TN 2340": 1, "SP3710": 2, "DR2340": 1, "P550X": 1,
+              "CF217A": 2, "D203U": 1, "DRCF219A": 2 }
           },
           {
             data: "19/09/2026",
-            itens: {
-              "12A": 6,
-              "78A": 7,
-              "UNIVERSAL": 0,
-              "83A": 3,
-              "TN 2340": 1,
-              "SP3710": 1,
-              "DR2340": 1,
-              "P550X": 1,
-              "CF217A": 2,
-              "D203U": 0,
-              "DRCF219A": 2
-            }
+            itens: { "12A": 6, "78A": 7, "UNIVERSAL": 0, "83A": 3,
+              "TN 2340": 1, "SP3710": 1, "DR2340": 1, "P550X": 1,
+              "CF217A": 2, "D203U": 0, "DRCF219A": 2 }
+          },
+          {
+            data: "10/10/2026",
+            itens: { "12A": 6, "78A": 9, "UNIVERSAL": 9, "83A": 3,
+              "TN 2340": 0, "SP3710": 2, "DR2340": 1, "P550X": 1,
+              "CF217A": 2, "D203U": 0, "DRCF219A": 2 }
+          },
+          {
+            data: "17/10/2026",
+            itens: { "12A": 6, "78A": 9, "UNIVERSAL": 5, "83A": 3,
+              "TN 2340": 0, "SP3710": 1, "DR2340": 1, "P550X": 1,
+              "CF217A": 0, "D203U": 0, "DRCF219A": 2 }
           }
         ]
       },
 
       /*
-       * ESTOQUE ATUAL - METAL BRONZE
-       * Quantidades da conferência enviada em 19/09/2026.
+       * METAL BRONZE – 17/10/2026
+       * A soma dos itens da planilha é 123; o total digitado nela é 122.
+       * O painel calcula a soma real e sinaliza a divergência.
        */
       estoqueMetalBronze: {
-        data: "19/09/2026",
+        data: "17/10/2026",
+        totalInformadoPlanilha: 122,
         itens: [
-          { modelo: "78A", quantidade: 41 },
-          { modelo: "UNIVERSAL", quantidade: 22 },
-          { modelo: "DR TN2340", quantidade: 4 },
-          { modelo: "3710", quantidade: 4 },
-          { modelo: "12A", quantidade: 3 },
-          { modelo: "83A", quantidade: 2 },
-          { modelo: "550-X", quantidade: 1 },
-          { modelo: "505X", quantidade: 1 },
-          { modelo: "TN2340", quantidade: 1 },
-          { modelo: "217A", quantidade: 0 },
-          { modelo: "219A", quantidade: 0 },
-          { modelo: "D203U", quantidade: 0 }
+          { modelo: "12A", quantidade: 18 },
+          { modelo: "78A", quantidade: 38 },
+          { modelo: "UNIVERSAL", quantidade: 40 },
+          { modelo: "83A", quantidade: 10 },
+          { modelo: "TN2340", quantidade: 2 },
+          { modelo: "DRTN2340", quantidade: 4 },
+          { modelo: "SP3710", quantidade: 3 },
+          { modelo: "HP 217A", quantidade: 5 },
+          { modelo: "DRCF219A", quantidade: 0 },
+          { modelo: "BQTL-5120X", quantidade: 1 },
+          { modelo: "D203U", quantidade: 1 },
+          { modelo: "505X", quantidade: 1 }
         ]
       },
 
@@ -1052,7 +1035,19 @@ body,
           local: "EXPEDIÇÃO - DISTRIBUIDORA",
           toner: "UNIVERSAL",
           datas: ["17/08/2026", "17/08/2026"]
-        }
+        }        ,
+        // Consumo de outubro/2026 transcrito da planilha fotografada em 17/10.
+        // Cada lançamento de data corresponde a uma unidade de toner.
+        { area: "ADMINISTRATIVO", local: "CONTAS A PAGAR", toner: "UNIVERSAL", datas: ["07/10/2026"] },
+        { area: "ADMINISTRATIVO", local: "COMPRAS", toner: "78A", datas: ["15/10/2026"] },
+        { area: "COMERCIAL", local: "BALCÃO DE ATENDIMENTO", toner: "78A", datas: ["17/10/2026"] },
+        { area: "COMERCIAL", local: "CAIXA 04 - MATRIZ", toner: "UNIVERSAL", datas: ["14/10/2026"] },
+        { area: "COMERCIAL", local: "CAIXAS 03 E 01 - MATRIZ", toner: "12A", datas: ["07/10/2026"] },
+        { area: "LOGÍSTICA", local: "RETIRA POSTERIOR", toner: "SP3710", datas: ["14/10/2026"] },
+        { area: "LOGÍSTICA", local: "TROCA E DEVOLUÇÃO", toner: "UNIVERSAL", datas: ["08/10/2026"] },
+        { area: "LOGÍSTICA", local: "SEPARAÇÃO DISTRIBUIDORA", toner: "UNIVERSAL", datas: ["07/10/2026"] },
+        { area: "CIDADE NOVA", local: "CAIXAS - CDN", toner: "12A", datas: ["07/10/2026", "07/10/2026"] }
+
       ]
     };
 
@@ -1266,6 +1261,7 @@ body,
       dados.estoqueMetalBronze.itens,
       "quantidade"
     );
+    const divergenciaMetalBronze = totalEstoqueMetalBronze - dados.estoqueMetalBronze.totalInformadoPlanilha;
 
     document.getElementById("cabecalhoEstoqueMetalBronze").innerHTML = `
       <th>Modelo</th>
@@ -1322,6 +1318,11 @@ body,
           `;
         })
         .join("");
+
+    if (consumoMensal.length === 0) {
+      document.getElementById("corpoConsumo").innerHTML =
+        '<tr><td colspan="5" style="text-align:center;color:#bdbdbd">Nenhum consumo registrado para o mês de referência.</td></tr>';
+    }
 
     document.getElementById("totalConsumoTabela").textContent =
       totalConsumido;
@@ -1434,8 +1435,10 @@ body,
     const destaques = [
       `Sala TI: ${totalAnterior} → ${totalAtual} unidades entre ${conferenciaAnterior.data} e ${conferenciaAtual.data} (${formatarComSinal(variacao)}; ${formatarComSinal(percentualVariacao, 1)}%).`,
       `Consumo mensal calculado pelas datas preenchidas: ${totalConsumido} unidade(s) de ${primeiroDiaMes} até ${dados.relatorio.geradoEm}.`,
+      `O consumo registrado é calculado pelos lançamentos da planilha; não é inferido a partir da variação do estoque.`,
       `Modelo mais consumido no mês: ${modeloMaisConsumido[0]} com ${modeloMaisConsumido[1]} unidade(s).`,
-      `Estoque Metal Bronze em ${dados.estoqueMetalBronze.data}: ${totalEstoqueMetalBronze} unidade(s) no total.`,
+      `Estoque Metal Bronze em ${dados.estoqueMetalBronze.data}: ${totalEstoqueMetalBronze} unidade(s) somadas por modelo.`,
+      ...(divergenciaMetalBronze !== 0 ? [`ATENÇÃO — Metal Bronze: a planilha indica ${dados.estoqueMetalBronze.totalInformadoPlanilha} unidade(s), mas a soma dos modelos resulta em ${totalEstoqueMetalBronze} (diferença de ${formatarComSinal(divergenciaMetalBronze)}). Conferir o total da planilha.`] : []),
       modelosZeradosSala.length
         ? `Sem estoque na Sala TI: ${modelosZeradosSala.join(", ")}.`
         : "Sala TI sem modelos zerados.",
