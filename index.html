@@ -575,6 +575,28 @@ body,
     transform: none !important;
   }
 }
+
+    /* Planejamento de reposição */
+    .compras-intro { color: var(--suave); line-height: 1.55; margin: 0 0 16px; }
+    .compras-config { display: flex; gap: 14px; flex-wrap: wrap; align-items: end; margin-bottom: 16px; }
+    .compras-config label { display: grid; gap: 6px; color: var(--suave); font-size: 13px; font-weight: 700; }
+    .compras-config input, .compras-config select { width: 155px; max-width: 100%; border: 1px solid #555; border-radius: 8px; padding: 10px; color: #fff; background: #202020; font: inherit; }
+    .compras-config select { width: 190px; }
+    .compras-cards { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin: 14px 0 20px; }
+    .compras-card { background:#1b1b1b; border:1px solid #3b3b3b; border-radius:11px; padding:14px; }
+    .compras-card strong { display:block; font-size:30px; color:var(--amarelo); margin-top:5px; }
+    .compras-card span { color:var(--suave); font-size:13px; }
+    .compras-table td:first-child { text-align:left; }
+    .status-compra { display:inline-block; padding:5px 9px; border-radius:7px; font-size:12px; font-weight:800; }
+    .status-critico { color:#ff8d8d; background:#4d1818; }
+    .status-compra-necessaria { color:#ffdb78; background:#4a3612; }
+    .status-transferencia { color:#a6dbff; background:#18364e; }
+    .status-normal { color:#8bdda9; background:#153e29; }
+    .compra-aviso { color:#ffda88; padding:12px; border-left:4px solid var(--amarelo); background:#242015; margin-top:12px; line-height:1.5; }
+    .compras-vazio { padding:18px; text-align:center !important; color:var(--suave); }
+    @media(max-width:950px){ .compras-cards { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+    @media(max-width:560px){ .compras-cards { grid-template-columns:1fr; } }
+    @media print { .compras-config { display:none!important; } }
   </style>
 </head>
 
@@ -595,6 +617,7 @@ body,
       <a href="#estoqueSala">Estoque da Sala</a>
       <a href="#estoqueMetalBronze">Metal Bronze</a>
       <a href="#consumoToner">Consumo de Toner</a>
+      <a href="#necessidadeCompra">Necessidade de Compra</a>
       <button type="button" id="menuAtividades">Atividades realizadas</button>
       <div class="menu-separador" aria-hidden="true"></div>
       <button type="button" id="imprimirRelatorio">Imprimir relatório</button>
@@ -760,6 +783,36 @@ body,
       </aside>
 
     </main>
+
+
+    <section class="box" id="necessidadeCompra" aria-labelledby="tituloCompras">
+      <h2 id="tituloCompras">Levantamento de Necessidade de Compra</h2>
+      <p class="compras-intro">Análise de reposição com base na última conferência da Sala TI, no estoque Metal Bronze e no consumo registrado em outubro. O painel distingue <strong>compra</strong> de <strong>transferência interna</strong>. Ajuste a meta e a reserva mínima para simular necessidades de abastecimento.</p>
+      <div class="compras-config">
+        <label>Meta total por modelo (un.)<input id="metaCompra" type="number" min="1" max="9999" value="5"></label>
+        <label>Reserva mínima Metal Bronze (un.)<input id="reservaMetal" type="number" min="0" max="9999" value="2"></label>
+        <label>Exibir
+          <select id="filtroCompras">
+            <option value="todos">Todos os modelos</option>
+            <option value="comprar">Sugestão de compra</option>
+            <option value="transferir">Transferência interna</option>
+            <option value="monitorar">Acompanhar</option>
+          </select>
+        </label>
+        <button type="button" class="botao-relatorio" id="imprimirCompras">Imprimir levantamento</button>
+      </div>
+      <div class="compras-cards" aria-live="polite">
+        <div class="compras-card"><span>Modelos com compra sugerida</span><strong id="compraModelos">0</strong></div>
+        <div class="compras-card"><span>Unidades sugeridas para compra</span><strong id="compraUnidades">0</strong></div>
+        <div class="compras-card"><span>Modelos para transferência</span><strong id="compraTransferencias">0</strong></div>
+        <div class="compras-card"><span>Modelos zerados na Sala TI</span><strong id="compraZerados">0</strong></div>
+      </div>
+      <div class="table-wrap"><table class="compras-table">
+        <thead><tr><th>Modelo</th><th>Sala TI</th><th>Metal Bronze</th><th>Total disponível</th><th>Consumo outubro</th><th>Sugestão</th><th>Quantidade</th><th>Prioridade</th></tr></thead>
+        <tbody id="corpoCompras"></tbody>
+      </table></div>
+      <div class="compra-aviso" id="avisoCompras"></div>
+    </section>
 
     <section class="box relatorio-atividades" id="atividadesRealizadas">
       <div class="relatorio-cabecalho">
@@ -1456,6 +1509,77 @@ body,
 
     document.getElementById("rodape").innerHTML =
       `Controle realizado com responsabilidade e atenção aos detalhes. Relatório gerado em: ${dados.relatorio.geradoEm}<br>By ${dados.relatorio.responsavel}`;
+
+    /* Análise de compras — não confunde falta na Sala com falta na empresa.
+       Equivalências limitadas a grafias inequívocas; modelos distintos não são fundidos. */
+    const normalizarModeloCompra = (modelo) => {
+      const chave = String(modelo).toUpperCase().replace(/[\s-]/g, "");
+      const equivalencias = { "TN2340": "TN2340", "P550X": "P550X" };
+      return equivalencias[chave] || chave;
+    };
+    const nomesCompra = {};
+    const comprasSala = {};
+    const comprasMetal = {};
+    const comprasConsumo = {};
+    Object.entries(conferenciaAtual.itens).forEach(([modelo, qtd]) => {
+      const chave = normalizarModeloCompra(modelo);
+      nomesCompra[chave] = modelo;
+      comprasSala[chave] = (comprasSala[chave] || 0) + Number(qtd || 0);
+    });
+    dados.estoqueMetalBronze.itens.forEach(({modelo, quantidade}) => {
+      const chave = normalizarModeloCompra(modelo);
+      if (!nomesCompra[chave]) nomesCompra[chave] = modelo;
+      comprasMetal[chave] = (comprasMetal[chave] || 0) + Number(quantidade || 0);
+    });
+    Object.entries(consumoPorModelo).forEach(([modelo, qtd]) => {
+      const chave = normalizarModeloCompra(modelo);
+      if (!nomesCompra[chave]) nomesCompra[chave] = modelo;
+      comprasConsumo[chave] = (comprasConsumo[chave] || 0) + Number(qtd || 0);
+    });
+    const chavesCompra = Object.keys(nomesCompra);
+
+    function atualizarCompras() {
+      const meta = Math.max(1, Math.floor(Number(document.getElementById("metaCompra").value) || 5));
+      const reserva = Math.max(0, Math.floor(Number(document.getElementById("reservaMetal").value) || 0));
+      const filtro = document.getElementById("filtroCompras").value;
+      const analise = chavesCompra.map((chave) => {
+        const sala = comprasSala[chave] || 0;
+        const metal = comprasMetal[chave] || 0;
+        const consumo = comprasConsumo[chave] || 0;
+        const total = sala + metal;
+        const comprar = Math.max(0, meta - total);
+        const salaBaixa = sala <= 2;
+        const transferencia = salaBaixa && metal > reserva && comprar === 0;
+        const tipo = comprar > 0 ? "comprar" : transferencia ? "transferir" : "monitorar";
+        const prioridade = total === 0 ? 0 : comprar > 0 ? 1 : transferencia ? 2 : salaBaixa ? 3 : 4;
+        const sugestao = comprar > 0 ? "Avaliar compra" : transferencia ? "Avaliar transferência" : "Acompanhar";
+        const classe = comprar > 0 ? (total === 0 ? "status-critico" : "status-compra-necessaria") : transferencia ? "status-transferencia" : "status-normal";
+        return {chave, modelo:nomesCompra[chave], sala, metal, total, consumo, comprar, tipo, prioridade, sugestao, classe};
+      }).sort((a,b) => a.prioridade-b.prioridade || b.consumo-a.consumo || a.modelo.localeCompare(b.modelo));
+
+      document.getElementById("compraModelos").textContent = analise.filter(x=>x.comprar>0).length;
+      document.getElementById("compraUnidades").textContent = analise.reduce((s,x)=>s+x.comprar,0);
+      document.getElementById("compraTransferencias").textContent = analise.filter(x=>x.tipo==="transferir").length;
+      document.getElementById("compraZerados").textContent = Object.values(comprasSala).filter(x=>x===0).length;
+      const linhas = analise.filter(x=>filtro==="todos" || x.tipo===filtro);
+      // Os campos deste relatório vêm apenas da base estática do próprio arquivo.
+      document.getElementById("corpoCompras").innerHTML = linhas.length ? linhas.map(x=>`
+        <tr><td>${x.modelo}</td><td>${x.sala}</td><td>${x.metal}</td>
+          <td>${x.total}</td><td>${x.consumo}</td>
+          <td><span class="status-compra ${x.classe}">${x.sugestao}${x.total===0 ? " — ZERADO" : ""}</span></td>
+          <td>${x.comprar > 0 ? x.comprar + " para compra" : x.tipo==="transferir" ? "Verificar transferência" : "—"}</td>
+          <td>${x.total===0 ? "Crítica" : x.comprar>0 ? "Alta" : x.tipo==="transferir" ? "Interna" : "Regular"}</td></tr>`).join("") : '<tr><td colspan="8" class="compras-vazio">Nenhum modelo corresponde ao filtro selecionado.</td></tr>';
+      document.getElementById("avisoCompras").textContent =
+        `Critério configurável: meta de ${meta} unidade(s) no estoque total de cada modelo e reserva de ${reserva} unidade(s) no Metal Bronze. As quantidades são sugestões para análise, não pedidos aprovados. ` +
+        `Transferências dependem de compatibilidade e liberação do estoque de origem. Modelos com nomes diferentes (ex.: CF217A e HP 217A; DR2340 e DRTN2340) não são somados automaticamente. ` +
+        `Consumo é o total de lançamentos disponíveis até ${dados.relatorio.geradoEm}; não se trata de previsão de demanda. ` +
+        (divergenciaMetalBronze !== 0 ? `ATENÇÃO: a soma dos itens Metal Bronze diverge do total da planilha em ${Math.abs(divergenciaMetalBronze)} unidade(s).` : "");
+    }
+    ["metaCompra", "reservaMetal", "filtroCompras"].forEach(id =>
+      document.getElementById(id).addEventListener("change", atualizarCompras));
+    document.getElementById("imprimirCompras").addEventListener("click", () => window.print());
+    atualizarCompras();
+
   </script>
 
 </body>
